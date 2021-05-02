@@ -1,10 +1,10 @@
 #include "map.h"
 
-typedef struct {
+typedef struct MapElement_t {
 	MapKeyElement mapKeyElement;
 	MapDataElement mapDataElement;
-	MapElement nextMapElement;
-} MapElement;
+	struct MapElement_t* nextMapElement;
+} *MapElement;
 
 struct Map_t {
 	copyMapDataElements copyDataElement;
@@ -12,7 +12,8 @@ struct Map_t {
 	freeMapDataElements freeDataElement;
 	freeMapKeyElements freeKeyElement;
 	compareMapKeyElements compareKeyElements;
-
+	MapElement head;
+	MapElement iterator;
 };
 
 
@@ -45,7 +46,14 @@ Map mapCopy(Map map)
 
 int mapGetSize(Map map)
 {
-
+	if (!map) {
+		return -1;
+	}
+	int size = 0;
+	for (MapElement i = map->head; i; i = i.nextMapElement) {
+		size++;
+	}
+	return size
 }
 
 bool mapContains(Map map, MapKeyElement element)
@@ -73,13 +81,27 @@ MapResult mapRemove(Map map, MapKeyElement keyElement)
 
 MapKeyElement mapGetFirst(Map map)
 {
-
+	if (!map) {
+		return NULL;
+	}
+	map->iterator = map->head;
+	if (!map->iterator) {
+		return NULL;
+	}
+	return map->iterator->mapKeyElement;//needs to create a new key element or not?
 }
 
 
 MapKeyElement mapGetNext(Map map)
 {
-
+	if (!map || !map->iterator) {
+		return NULL;
+	}
+	map->iterator = map->iterator->nextMapElement;
+	if (!map->iterator) {
+		return NULL;
+	}
+	return map->iterator->mapKeyElement;//needs to create a new key element or not?
 }
 
 
