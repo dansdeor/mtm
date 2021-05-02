@@ -30,6 +30,13 @@ Map mapCreate(copyMapDataElements copyDataElement,
 	if (!map) {
 		return NULL;
 	}
+	map->copyDataElement = copyDataElement;
+	map->copyKeyElement = copyKeyElement;
+	map->freeDataElement = freeDataElement;
+	map->freeKeyElement = freeKeyElement;
+	map->compareKeyElements = compareKeyElements;
+	map->head = NULL;
+	map->iterator = NULL;
 	return map;
 }
 
