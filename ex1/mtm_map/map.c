@@ -57,7 +57,7 @@ int mapGetSize(Map map)
 		return -1;
 	}
 	int size = 0;
-	for (MapElement i = map->head; i; i = i.nextMapElement) {
+	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
 		size++;
 	}
 	return size
@@ -65,7 +65,16 @@ int mapGetSize(Map map)
 
 bool mapContains(Map map, MapKeyElement element)
 {
-
+	if (!map || !element) {
+		return false;
+	}
+	//map->iterator = NULL; needs to check that!!!
+	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
+		if (map->compareKeyElements(i, element) == 0) {
+			return true;
+		}
+	}
+	return false;
 }
 
 
@@ -76,7 +85,15 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
 
 MapDataElement mapGet(Map map, MapKeyElement keyElement)
 {
-
+	if (!map || !keyElement) {
+		return NULL;
+	}
+	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
+		if (map->compareKeyElements(i, keyElement) == 0) {
+			return i->mapDataElement;
+		}
+	}
+	return NULL;
 }
 
 
