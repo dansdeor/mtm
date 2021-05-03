@@ -17,8 +17,9 @@ set(CMAKE_C_FLAGS ${MTM_FLAGS_DEBUG})
 
 add_executable(part1 ex0/part1/part1.c)
 add_executable(mtm_buggy ex0/part2/mtm_buggy.c)
-add_executable(dan_2_2 ex1/dry/dan_2_2.c)
 
+add_executable(dan_2_2 ex1/dry/dan_2_2.c)
+add_executable(map_test ex1/tests/map_example_test.c ex1/mtm_map/map.c)
 
 # Add the names of your source files here
 #set(C_FILES "<YOURFILENAMES>")
