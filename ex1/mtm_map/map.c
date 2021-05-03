@@ -1,11 +1,13 @@
 #include "map.h"
 #include <stdlib.h>
 
+
 typedef struct MapElement_t {
 	MapKeyElement keyElement;
 	MapDataElement dataElement;
 	struct MapElement_t* nextMapElement;
-} *MapElement;
+} * MapElement;
+
 
 struct Map_t {
 	copyMapDataElements copyDataElement;
@@ -69,6 +71,7 @@ Map mapCopy(Map map)
 	}
 	return new_map;
 }
+
 
 int mapGetSize(Map map)
 {
@@ -145,6 +148,7 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
 	return MAP_SUCCESS;
 }
 
+
 MapDataElement mapGet(Map map, MapKeyElement keyElement)
 {
 	if (!map || !keyElement) {
@@ -158,10 +162,39 @@ MapDataElement mapGet(Map map, MapKeyElement keyElement)
 	return NULL;
 }
 
+static void mapElementFree(Map map, MapElement element)
+{
+	if (!map || !element) {
+		return;
+	}
+	map->freeKeyElement(element->keyElement);
+	map->freeDataElement(element->dataElement);
+	free(element);
+}
 
 MapResult mapRemove(Map map, MapKeyElement keyElement)
 {
+	if (!map || !keyElement) {
+		return MAP_NULL_ARGUMENT;
+	}
+	if (!map->head && map->compareKeyElements(map->head->keyElement, keyElement) == 0) {
+		MapElement element = map->head;
+		map->head = map->head->nextMapElement;
+		mapElementFree(map, element);
+		return MAP_SUCCESS;
+	}
 
+	MapElement iterator = map->head;
+	while (iterator->nextMapElement != NULL) {
+		if (map->compareKeyElements(iterator->nextMapElement->keyElement, keyElement) == 0) {
+			MapElement element = iterator->nextMapElement;
+			iterator->nextMapElement = iterator->nextMapElement->nextMapElement;
+			mapElementFree(map, element);
+			return MAP_SUCCESS;
+		}
+		iterator = iterator->nextMapElement;
+	}
+	return MAP_ITEM_DOES_NOT_EXIST;
 }
 
 
