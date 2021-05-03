@@ -37,31 +37,33 @@ char* foo(char* str, int* x)
  * 12. added to for braces (needs to check if this is important or not)
  * 13. there is no reason to use both ifs if the other if checks the same statement
  * 14. added new line to both of printfs
+ * 15. x is not conventional name
+ * 16. str2 is not conventional name
  */
 
-char* foo_updated(const char* const str, int* const x)
+char* foo_updated(const char* const str, int* const str_length)
 {
-	if (NULL == x || NULL == str) {
+	if (NULL == str_length || NULL == str) {
 		return NULL;
 	}
-	*x = strlen(str);
+	*str_length = strlen(str);
 
-	char* str2 = malloc(sizeof(char) * (*x + 1));
-	if (NULL == str2) {
+	char* reversed_str = malloc(sizeof(char) * (*str_length + 1));
+	if (NULL == reversed_str) {
 		return NULL;
 	}
-	str2[*x] = '\0';
+	reversed_str[*str_length] = '\0';
 
-	for (int i = 0; i < *x; i++) {
-		str2[i] = str[*x - i - 1];
+	for (int i = 0; i < *str_length; i++) {
+		reversed_str[i] = str[*str_length - i - 1];
 	}
-	if (*x % 2 == 0) {
+	if (*str_length % 2 == 0) {
 		printf("%s\n", str);
 	}
 	else {
-		printf("%s\n", str2);
+		printf("%s\n", reversed_str);
 	}
-	return str2;
+	return reversed_str;
 }
 
 int main(void)
