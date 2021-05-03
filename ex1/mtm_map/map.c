@@ -6,7 +6,7 @@ typedef struct MapElement_t {
 	MapKeyElement keyElement;
 	MapDataElement dataElement;
 	struct MapElement_t* nextMapElement;
-} * MapElement;
+} *MapElement;
 
 
 struct Map_t {
@@ -46,8 +46,13 @@ Map mapCreate(copyMapDataElements copyDataElement,
 
 void mapDestroy(Map map)
 {
-
+	if (!map) {
+		return;
+	}
+	mapClear(map);
+	free(map);
 }
+
 
 Map mapCopy(Map map)
 {
@@ -100,12 +105,11 @@ bool mapContains(Map map, MapKeyElement element)
 }
 
 
-MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
+static MapResult createMapElement(Map map, MapElement* pointer, MapKeyElement keyElement, MapDataElement dataElement)
 {
-	if (!map || !keyElement || !dataElement) {
+	if (!map || !pointer || !keyElement || !dataElement) {
 		return MAP_NULL_ARGUMENT;
 	}
-
 	MapElement element = malloc(sizeof(*element));
 	if (!element) {
 		return MAP_OUT_OF_MEMORY;
@@ -122,6 +126,18 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
 		return MAP_OUT_OF_MEMORY;
 	}
 	element->nextMapElement = NULL;
+	*pointer = element;
+	return MAP_SUCCESS;
+}
+
+
+MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
+{
+	MapElement element;
+	MapResult allocation_result = createMapElement(map, &element, keyElement, dataElement);
+	if (allocation_result != MAP_SUCCESS) {
+		return allocation_result;
+	}
 
 	if (mapContains(map, keyElement)) {
 		mapRemove(map, keyElement);
@@ -162,6 +178,7 @@ MapDataElement mapGet(Map map, MapKeyElement keyElement)
 	return NULL;
 }
 
+
 static void mapElementFree(Map map, MapElement element)
 {
 	if (!map || !element) {
@@ -171,6 +188,7 @@ static void mapElementFree(Map map, MapElement element)
 	map->freeDataElement(element->dataElement);
 	free(element);
 }
+
 
 MapResult mapRemove(Map map, MapKeyElement keyElement)
 {
@@ -226,5 +244,15 @@ MapKeyElement mapGetNext(Map map)
 
 MapResult mapClear(Map map)
 {
-
+	if (!map) {
+		return MAP_NULL_ARGUMENT;
+	}
+	MapElement iterator = map->head;
+	while (iterator != NULL) {
+		MapElement element = iterator;
+		iterator = iterator->nextMapElement;
+		mapElementFree(map, element);
+	}
+	map->head = NULL;
+	return MAP_SUCCESS;
 }
