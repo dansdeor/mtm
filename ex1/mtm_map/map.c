@@ -95,7 +95,6 @@ bool mapContains(Map map, MapKeyElement element)
 	if (!map || !element) {
 		return false;
 	}
-	//map->iterator = NULL; needs to check that!!!
 	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
 		if (map->compareKeyElements(i, element) == 0) {
 			return true;
@@ -195,7 +194,11 @@ MapResult mapRemove(Map map, MapKeyElement keyElement)
 	if (!map || !keyElement) {
 		return MAP_NULL_ARGUMENT;
 	}
-	if (!map->head && map->compareKeyElements(map->head->keyElement, keyElement) == 0) {
+	if (!map->head) {
+		return MAP_ITEM_DOES_NOT_EXIST;
+	}
+
+	if (map->compareKeyElements(map->head->keyElement, keyElement) == 0) {
 		MapElement element = map->head;
 		map->head = map->head->nextMapElement;
 		mapElementFree(map, element);
@@ -225,7 +228,7 @@ MapKeyElement mapGetFirst(Map map)
 	if (!map->iterator) {
 		return NULL;
 	}
-	return map->iterator->keyElement;//needs to create a new key element or not?
+	return map->iterator->keyElement;
 }
 
 
@@ -238,7 +241,7 @@ MapKeyElement mapGetNext(Map map)
 	if (!map->iterator) {
 		return NULL;
 	}
-	return map->iterator->keyElement;//needs to create a new key element or not?
+	return map->iterator->keyElement;
 }
 
 
