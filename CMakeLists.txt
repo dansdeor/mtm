@@ -15,9 +15,13 @@ set(MTM_FLAGS_RELEASE "${MTM_FLAGS_DEBUG} -DNDEBUG")
 # Set the flags for gcc
 set(CMAKE_C_FLAGS ${MTM_FLAGS_DEBUG})
 
+#ex0
 add_executable(part1 ex0/part1/part1.c)
 add_executable(mtm_buggy ex0/part2/mtm_buggy.c)
 
+#ex1
+add_executable(2_1 ex1/dry/2_1.c)
+add_executable(levi_2_2 ex1/dry/levi_2_2.c)
 add_executable(dan_2_2 ex1/dry/dan_2_2.c)
 add_executable(map_test ex1/tests/map_example_test.c ex1/mtm_map/map.c)
 
