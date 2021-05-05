@@ -96,7 +96,7 @@ bool mapContains(Map map, MapKeyElement element)
 		return false;
 	}
 	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
-		if (map->CompareKeyElements(i, element) == 0) {
+		if (map->CompareKeyElements(i->keyElement, element) == 0) {
 			return true;
 		}
 	}
@@ -170,7 +170,7 @@ MapDataElement mapGet(Map map, MapKeyElement keyElement)
 		return NULL;
 	}
 	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
-		if (map->CompareKeyElements(i, keyElement) == 0) {
+		if (map->CompareKeyElements(i->keyElement, keyElement) == 0) {
 			return i->dataElement;
 		}
 	}
