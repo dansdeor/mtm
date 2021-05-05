@@ -10,11 +10,11 @@ typedef struct MapElement_t {
 
 
 struct Map_t {
-	copyMapDataElements copyDataElement;
-	copyMapKeyElements copyKeyElement;
-	freeMapDataElements freeDataElement;
-	freeMapKeyElements freeKeyElement;
-	compareMapKeyElements compareKeyElements;
+	copyMapDataElements CopyDataElement;
+	copyMapKeyElements CopyKeyElement;
+	freeMapDataElements FreeDataElement;
+	freeMapKeyElements FreeKeyElement;
+	compareMapKeyElements CompareKeyElements;
 	MapElement head;
 	MapElement iterator;
 };
@@ -33,11 +33,11 @@ Map mapCreate(copyMapDataElements copyDataElement,
 	if (!map) {
 		return NULL;
 	}
-	map->copyDataElement = copyDataElement;
-	map->copyKeyElement = copyKeyElement;
-	map->freeDataElement = freeDataElement;
-	map->freeKeyElement = freeKeyElement;
-	map->compareKeyElements = compareKeyElements;
+	map->CopyDataElement = copyDataElement;
+	map->CopyKeyElement = copyKeyElement;
+	map->FreeDataElement = freeDataElement;
+	map->FreeKeyElement = freeKeyElement;
+	map->CompareKeyElements = compareKeyElements;
 	map->head = NULL;
 	map->iterator = NULL;
 	return map;
@@ -59,11 +59,11 @@ Map mapCopy(Map map)
 	if (!map) {
 		return NULL;
 	}
-	Map new_map = mapCreate(map->copyDataElement,
-							map->copyKeyElement,
-							map->freeDataElement,
-							map->freeKeyElement,
-							map->compareKeyElements);
+	Map new_map = mapCreate(map->CopyDataElement,
+							map->CopyKeyElement,
+							map->FreeDataElement,
+							map->FreeKeyElement,
+							map->CompareKeyElements);
 	if (!map->head) {
 		return new_map;
 	}
@@ -96,7 +96,7 @@ bool mapContains(Map map, MapKeyElement element)
 		return false;
 	}
 	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
-		if (map->compareKeyElements(i, element) == 0) {
+		if (map->CompareKeyElements(i, element) == 0) {
 			return true;
 		}
 	}
@@ -113,12 +113,12 @@ static MapResult createMapElement(Map map, MapElement* pointer, MapKeyElement ke
 	if (!element) {
 		return MAP_OUT_OF_MEMORY;
 	}
-	element->keyElement = map->copyKeyElement(keyElement);
+	element->keyElement = map->CopyKeyElement(keyElement);
 	if (!element->keyElement) {
 		free(element);
 		return MAP_OUT_OF_MEMORY;
 	}
-	element->dataElement = map->copyDataElement(dataElement);
+	element->dataElement = map->CopyDataElement(dataElement);
 	if (!element->dataElement) {
 		free(element->keyElement);
 		free(element);
@@ -145,14 +145,14 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
 		map->head = element;
 		return MAP_SUCCESS;
 	}
-	if (map->compareKeyElements(map->head->keyElement, element->keyElement) > 0) {
+	if (map->CompareKeyElements(map->head->keyElement, element->keyElement) > 0) {
 		element->nextMapElement = map->head;
 		map->head = element;
 		return MAP_SUCCESS;
 	}
 	MapElement iterator = map->head;
 	while (iterator->nextMapElement != NULL) {
-		if (map->compareKeyElements(iterator->nextMapElement->keyElement, element->keyElement) > 0) {
+		if (map->CompareKeyElements(iterator->nextMapElement->keyElement, element->keyElement) > 0) {
 			element->nextMapElement = iterator->nextMapElement;
 			iterator->nextMapElement = element;
 			return MAP_SUCCESS;
@@ -170,7 +170,7 @@ MapDataElement mapGet(Map map, MapKeyElement keyElement)
 		return NULL;
 	}
 	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
-		if (map->compareKeyElements(i, keyElement) == 0) {
+		if (map->CompareKeyElements(i, keyElement) == 0) {
 			return i->dataElement;
 		}
 	}
@@ -183,8 +183,8 @@ static void mapElementFree(Map map, MapElement element)
 	if (!map || !element) {
 		return;
 	}
-	map->freeKeyElement(element->keyElement);
-	map->freeDataElement(element->dataElement);
+	map->FreeKeyElement(element->keyElement);
+	map->FreeDataElement(element->dataElement);
 	free(element);
 }
 
@@ -198,7 +198,7 @@ MapResult mapRemove(Map map, MapKeyElement keyElement)
 		return MAP_ITEM_DOES_NOT_EXIST;
 	}
 
-	if (map->compareKeyElements(map->head->keyElement, keyElement) == 0) {
+	if (map->CompareKeyElements(map->head->keyElement, keyElement) == 0) {
 		MapElement element = map->head;
 		map->head = map->head->nextMapElement;
 		mapElementFree(map, element);
@@ -207,7 +207,7 @@ MapResult mapRemove(Map map, MapKeyElement keyElement)
 
 	MapElement iterator = map->head;
 	while (iterator->nextMapElement != NULL) {
-		if (map->compareKeyElements(iterator->nextMapElement->keyElement, keyElement) == 0) {
+		if (map->CompareKeyElements(iterator->nextMapElement->keyElement, keyElement) == 0) {
 			MapElement element = iterator->nextMapElement;
 			iterator->nextMapElement = iterator->nextMapElement->nextMapElement;
 			mapElementFree(map, element);
