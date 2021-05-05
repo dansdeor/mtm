@@ -19,6 +19,7 @@ struct Map_t {
 	MapElement iterator;
 };
 
+
 Map mapCreate(copyMapDataElements copyDataElement,
 			  copyMapKeyElements copyKeyElement,
 			  freeMapDataElements freeDataElement,
