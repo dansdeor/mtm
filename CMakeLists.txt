@@ -24,8 +24,11 @@ add_executable(2_1 ex1/dry/2_1.c)
 add_executable(levi_2_2 ex1/dry/levi_2_2.c)
 add_executable(dan_2_2 ex1/dry/dan_2_2.c)
 add_executable(map_test ex1/tests/map_example_test.c ex1/mtm_map/map.c)
-
-# Add the names of your source files here
-#set(C_FILES "<YOURFILENAMES>")
-
-#add_executable(exe_name ${C_FILES})
+add_executable(
+        chess_test
+        ex1/tests/chessSystemTestsExample.c
+        ex1/chessSystem.c
+        ex1/tournament.c
+        ex1/game.c
+        ex1/player.c
+)
