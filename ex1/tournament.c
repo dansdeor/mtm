@@ -8,6 +8,7 @@
 struct tournament_t {
 	const char* location;
 	int max_games_per_player;
+	TournamentStatus status;
 	Map games;
 };
 
@@ -24,7 +25,7 @@ Tournament copyTournament(Tournament tournament)
 		return NULL;
 	}
 	strcpy(location, tournament->location);
-	Map games = mapCreate();
+	Map games = mapCreate(copyGame, copyGameIndex, freeGame, freeGameIndex, compareGameIndex);
 	if (!games) {
 		free(new_tournament);
 		free(location);
@@ -33,8 +34,13 @@ Tournament copyTournament(Tournament tournament)
 
 	new_tournament->location = location;
 	new_tournament->max_games_per_player = tournament->max_games_per_player;
-	MAP_FOREACH()
-
+	new_tournament->status = tournament->status;
+	MAP_FOREACH(int*, i, tournament->games) {
+		if (mapPut(new_tournament->games, i, mapGet(tournament->games, i)) != MAP_SUCCESS) {
+			tournmentDestroy(new_tournament);
+		}
+	}
+	return new_tournament;
 }
 
 int* copyTournamentId(int* tournament_id)
@@ -47,7 +53,7 @@ void freeTournament(Tournament tournament)
 
 }
 
-void freeTournamentId(int* tournament)
+void freeTournamentId(int* tournament_id)
 {
 
 }
