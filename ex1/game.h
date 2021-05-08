@@ -23,4 +23,8 @@ int compareGameIndex(void* first_game_index, void* second_game_index);
 
 Game createGame(int first_player, int second_player, Winner winner, int play_time);
 
+int getFirstPlayerId(Game game);
+
+int getSecondPlayerId(Game game);
+
 #endif /* GAME_H_ */

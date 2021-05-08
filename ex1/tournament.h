@@ -13,24 +13,24 @@ typedef enum {
 } TournamentStatus;
 
 
-Tournament copyTournament(Tournament tournament);
+void* copyTournament(void* tournament);
 
-int* copyTournamentId(int* tournament_id);
+void* copyTournamentId(void* tournament_id);
 
-void freeTournament(Tournament tournament);
+void freeTournament(void* tournament);
 
-void freeTournamentId(int* tournament_id);
+void freeTournamentId(void* tournament_id);
 
-Tournament createTournament(int max_games_per_player,
-							const char* tournament_location);
+int compareTournamentId(void* first_tournament_id, void* second_tournament_id);
+
+Tournament createTournament(int max_games_per_player, const char* tournament_location, TournamentStatus status);
 
 int getMaxGamesPerPlayer(Tournament tournament);
 
-const char* getTournamentLocation(Tournament tournament);
+int getPlayerParticipationNumber(Tournament tournament, int player_id);
 
 //Map const getTournamentGames(Tournament tournament);
 
-bool isTournamentLocationLegal(const char* location);
 
 
 #endif /* TOURNAMENT_H_ */
