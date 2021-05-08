@@ -76,6 +76,9 @@ ChessResult chessAddTournament(ChessSystem chess, int tournament_id,
 	if (tournament_id <= 0) {
 		return CHESS_INVALID_ID;
 	}
+	if (max_games_per_player <= 0) {
+		return CHESS_INVALID_MAX_GAMES;
+	}
 	if (!isTournamentLocationLegal(tournament_location)) {
 		return CHESS_INVALID_LOCATION;
 	}
@@ -83,7 +86,50 @@ ChessResult chessAddTournament(ChessSystem chess, int tournament_id,
 		return CHESS_TOURNAMENT_ALREADY_EXISTS;
 	}
 	Tournament tournament = createTournament(max_games_per_player, tournament_location, STARTED);
-	mapPut(chess->tournaments, &tournament_id, tournament);
+	if (!tournament) {
+		return CHESS_OUT_OF_MEMORY;
+	}
+	if (mapPut(chess->tournaments, &tournament_id, tournament) == MAP_OUT_OF_MEMORY) {
+		freeTournament(tournament);
+		return CHESS_OUT_OF_MEMORY;
+	}
 	freeTournament(tournament);
+	return CHESS_SUCCESS;
+}
+
+
+ChessResult chessAddGame(ChessSystem chess, int tournament_id, int first_player,
+						 int second_player, Winner winner, int play_time)
+{
+	if (!chess) {
+		return CHESS_NULL_ARGUMENT;
+	}
+	if (tournament_id <= 0 || first_player <= 0 || second_player <= 0) {
+		return CHESS_INVALID_ID;
+	}
+	if (!mapContains(chess->tournaments, &tournament_id)) {
+		return CHESS_TOURNAMENT_NOT_EXIST;
+	}
+	Tournament tournament = mapGet(chess->tournaments, &tournament_id);
+	if (getTournamentStatus(tournament) == ENDED) {
+		return CHESS_TOURNAMENT_ENDED;
+	}
+	if (isGameExist(tournament, first_player, second_player)) {
+		return CHESS_GAME_ALREADY_EXISTS;
+	}
+	if (play_time <= 0) {
+		return CHESS_INVALID_PLAY_TIME;
+	}
+	int max_plays_per_player = getMaxGamesPerPlayer(tournament);
+	if (max_plays_per_player <= getPlayerParticipationNumber(tournament, first_player)) {
+		return CHESS_EXCEEDED_GAMES;
+	}
+	if (max_plays_per_player <= getPlayerParticipationNumber(tournament, second_player)) {
+		return CHESS_EXCEEDED_GAMES;
+	}
+	//because the arguments are not set to null the only option is memory allocation problem
+	if (addGame(tournament, first_player, second_player, winner, play_time) != MAP_SUCCESS) {
+		return CHESS_OUT_OF_MEMORY;
+	}
 	return CHESS_SUCCESS;
 }

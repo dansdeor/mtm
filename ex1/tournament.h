@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include "mtm_map/map.h"
+#include "game.h"
 
 
 typedef struct tournament_t* Tournament;
@@ -29,8 +30,12 @@ int getMaxGamesPerPlayer(Tournament tournament);
 
 int getPlayerParticipationNumber(Tournament tournament, int player_id);
 
-//Map const getTournamentGames(Tournament tournament);
+Map getTournamentGames(Tournament tournament);
 
+TournamentStatus getTournamentStatus(Tournament tournament);
 
+bool isGameExist(Tournament tournament, int first_player_id, int second_player_id);
+
+MapResult addGame(Tournament tournament, int first_player, int second_player, Winner winner, int play_time);
 
 #endif /* TOURNAMENT_H_ */
