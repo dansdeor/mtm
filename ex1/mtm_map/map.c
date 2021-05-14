@@ -228,7 +228,7 @@ MapKeyElement mapGetFirst(Map map)
 	if (!map->iterator) {
 		return NULL;
 	}
-	return map->iterator->keyElement;
+	return map->CopyKeyElement(map->iterator->keyElement);
 }
 
 
@@ -241,7 +241,7 @@ MapKeyElement mapGetNext(Map map)
 	if (!map->iterator) {
 		return NULL;
 	}
-	return map->iterator->keyElement;
+	return map->CopyKeyElement(map->iterator->keyElement);
 }
 
 
