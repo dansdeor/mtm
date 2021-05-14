@@ -7,13 +7,13 @@
 
 
 bool testChessAddTournament() {
-	ChessSystem chess = chessCreate();
-	ASSERT_TEST(chessAddTournament(chess, 1, 4, "London") == CHESS_SUCCESS);
+    ChessSystem chess = chessCreate();
+    ASSERT_TEST(chessAddTournament(chess, 1, 4, "London") == CHESS_SUCCESS);
     ASSERT_TEST(chessAddTournament(chess, 2, 5, "London") == CHESS_SUCCESS);
     ASSERT_TEST(chessAddTournament(chess, 1, 10, "Paris") == CHESS_TOURNAMENT_ALREADY_EXISTS);
 
-	chessDestroy(chess);
-	return true;
+    chessDestroy(chess);
+    return true;
 }
 
 bool testChessRemoveTournament() {
@@ -43,6 +43,7 @@ bool testChessPrintLevelsAndTournamentStatistics(){
     if(!file_levels){
         printf("test failed to open file, make sure you have the folder tests in the same folder with chessSystem"
                "excutable file and you have write permissions for the file /tests/player_levels_your_output.txt");
+        return false;
     }
     ChessSystem chess = chessCreate();
     ASSERT_TEST(chessAddTournament(chess, 1, 4, "London") == CHESS_SUCCESS);
@@ -56,6 +57,7 @@ bool testChessPrintLevelsAndTournamentStatistics(){
     ASSERT_TEST(chessSavePlayersLevels(chess, file_levels) == CHESS_SUCCESS);
     ASSERT_TEST(chessSaveTournamentStatistics(chess, "./tests/tournament_statistics_your_output.txt") == CHESS_SUCCESS);
     chessDestroy(chess);
+    fclose(file_levels);
     return true;
 }
 
@@ -63,38 +65,38 @@ bool testChessPrintLevelsAndTournamentStatistics(){
 
 /*The functions for the tests should be added here*/
 bool (*tests[]) (void) = {
-                      testChessAddTournament,
-                      testChessRemoveTournament,
-                      testChessAddGame,
-                      testChessPrintLevelsAndTournamentStatistics
+        testChessAddTournament,
+        testChessRemoveTournament,
+        testChessAddGame,
+        testChessPrintLevelsAndTournamentStatistics
 };
 
 /*The names of the test functions should be added here*/
 const char* testNames[] = {
-                           "testChessAddTournament",
-                           "testChessRemoveTournament",
-                           "testChessAddGame",
-                           "testChessPrintLevelsAndTournamentStatistics"
+        "testChessAddTournament",
+        "testChessRemoveTournament",
+        "testChessAddGame",
+        "testChessPrintLevelsAndTournamentStatistics"
 };
 
 int main(int argc, char *argv[]) {
     if (argc == 1) {
         for (int test_idx = 0; test_idx < NUMBER_TESTS; test_idx++) {
-              RUN_TEST(tests[test_idx], testNames[test_idx]);
+            RUN_TEST(tests[test_idx], testNames[test_idx]);
         }
         return 0;
     }
     if (argc != 2) {
-      fprintf(stdout, "Usage: chessSystem <test index>\n");
-      return 0;
-  }
+        fprintf(stdout, "Usage: chessSystem <test index>\n");
+        return 0;
+    }
 
-  int test_idx = strtol(argv[1], NULL, 10);
-  if (test_idx < 1 || test_idx > NUMBER_TESTS) {
-      fprintf(stderr, "Invalid test index %d\n", test_idx);
-      return 0;
-  }
+    int test_idx = strtol(argv[1], NULL, 10);
+    if (test_idx < 1 || test_idx > NUMBER_TESTS) {
+        fprintf(stderr, "Invalid test index %d\n", test_idx);
+        return 0;
+    }
 
-  RUN_TEST(tests[test_idx - 1], testNames[test_idx - 1]);
-  return 0;
+    RUN_TEST(tests[test_idx - 1], testNames[test_idx - 1]);
+    return 0;
 }

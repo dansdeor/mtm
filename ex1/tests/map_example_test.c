@@ -117,6 +117,7 @@ bool testIterator() {
     int i = 1;
     MAP_FOREACH(int *, iter, map) {
       ASSERT_TEST(*iter == i);
+      freeInt(iter);
       i++;
     }
 
