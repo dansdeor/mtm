@@ -1,15 +1,9 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#include "chessSystem.h"
+
 typedef struct game_t* Game;
-
-
-typedef enum {
-	FIRST_PLAYER,
-	SECOND_PLAYER,
-	DRAW
-} Winner;
-
 
 void* copyGame(void* game);
 
@@ -26,5 +20,15 @@ Game createGame(int first_player, int second_player, Winner winner, int play_tim
 int getFirstPlayerId(Game game);
 
 int getSecondPlayerId(Game game);
+
+Winner getWinner(Game game);
+
+int getPlayTime(Game game);
+
+void setFirstPlayerId(Game game, int player_id);
+
+void setSecondPlayerId(Game game, int player_id);
+
+void setWinner(Game game, Winner winner);
 
 #endif /* GAME_H_ */

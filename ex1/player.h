@@ -1,6 +1,7 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+#define INVALID_PLAYER_ID (0)
 
 typedef struct player_t* Player;
 
@@ -24,6 +25,10 @@ int getPlayerLoses(Player player);
 
 int getPlayerDraws(Player player);
 
+int getPlayerPlayTime(Player player);
+
+int getPlayerNumberOfPlays(Player player);
+
 void setPlayerScore(Player player, int score);
 
 void setPlayerWins(Player player, int num_wins);
@@ -31,5 +36,9 @@ void setPlayerWins(Player player, int num_wins);
 void setPlayerLoses(Player player, int num_loses);
 
 void setPlayerDraws(Player player, int num_draws);
+
+void setPlayerPlayTime(Player player, int play_time);
+
+void setPlayerNumberOfPlays(Player player, int number_of_plays);
 
 #endif /* PLAYER_H_ */

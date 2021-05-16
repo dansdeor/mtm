@@ -70,6 +70,7 @@ Game createGame(int first_player_id, int second_player_id, Winner winner, int pl
 	return game;
 }
 
+
 int getFirstPlayerId(Game game)
 {
 	if (!game) {
@@ -85,4 +86,49 @@ int getSecondPlayerId(Game game)
 		return 0;
 	}
 	return game->second_player_id;
+}
+
+
+Winner getWinner(Game game)
+{
+	if (!game) {
+		return DRAW;
+	}
+	return game->winner;
+}
+
+
+int getPlayTime(Game game)
+{
+	if (!game) {
+		return 0;
+	}
+	return game->play_time;
+}
+
+
+void setFirstPlayerId(Game game, int player_id)
+{
+	if (!game) {
+		return;
+	}
+	game->first_player_id = player_id;
+}
+
+
+void setSecondPlayerId(Game game, int player_id)
+{
+	if (!game) {
+		return;
+	}
+	game->second_player_id = player_id;
+}
+
+
+void setWinner(Game game, Winner winner)
+{
+	if (!game) {
+		return;
+	}
+	game->winner = winner;
 }

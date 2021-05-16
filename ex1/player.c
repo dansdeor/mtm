@@ -7,6 +7,8 @@ struct player_t {
 	int num_wins;
 	int num_loses;
 	int num_draws;
+	int play_time;
+	int number_of_plays;
 };
 
 
@@ -23,6 +25,8 @@ void* copyPlayer(void* player)
 	new_player->num_wins = ((Player) player)->num_wins;
 	new_player->num_loses = ((Player) player)->num_loses;
 	new_player->num_draws = ((Player) player)->num_draws;
+	new_player->play_time = ((Player) player)->play_time;
+	new_player->number_of_plays = ((Player) player)->number_of_plays;
 	return new_player;
 }
 
@@ -69,6 +73,8 @@ Player createPlayer()
 	player->num_wins = 0;
 	player->num_loses = 0;
 	player->num_draws = 0;
+	player->play_time = 0;
+	player->number_of_plays = 0;
 	return player;
 }
 
@@ -109,6 +115,24 @@ int getPlayerDraws(Player player)
 }
 
 
+int getPlayerPlayTime(Player player)
+{
+	if (!player) {
+		return 0;
+	}
+	return player->play_time;
+}
+
+
+int getPlayerNumberOfPlays(Player player)
+{
+	if (!player) {
+		return 0;
+	}
+	return player->number_of_plays;
+}
+
+
 void setPlayerScore(Player player, int score)
 {
 	if (!player) {
@@ -142,4 +166,22 @@ void setPlayerDraws(Player player, int num_draws)
 		return;
 	}
 	player->num_draws = num_draws;
+}
+
+
+void setPlayerPlayTime(Player player, int play_time)
+{
+	if (!player) {
+		return;
+	}
+	player->play_time = play_time;
+}
+
+
+void setPlayerNumberOfPlays(Player player, int number_of_plays)
+{
+	if (!player) {
+		return;
+	}
+	player->number_of_plays = number_of_plays;
 }

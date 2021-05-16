@@ -90,6 +90,7 @@ int mapGetSize(Map map)
 	return size;
 }
 
+
 bool mapContains(Map map, MapKeyElement element)
 {
 	if (!map || !element) {
@@ -257,5 +258,6 @@ MapResult mapClear(Map map)
 		mapElementFree(map, element);
 	}
 	map->head = NULL;
+	map->iterator = NULL;
 	return MAP_SUCCESS;
 }
