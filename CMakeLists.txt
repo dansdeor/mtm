@@ -31,4 +31,6 @@ add_executable(
         ex1/tournament.c
         ex1/game.c
         ex1/player.c
+        ex1/player_levels.c
+        ex1/mtm_map/map.c
 )

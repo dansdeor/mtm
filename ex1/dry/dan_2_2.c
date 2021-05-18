@@ -25,11 +25,9 @@ char* foo(char* str, int* x)
  * 1. char* str2 declared not in the same place of usage
  * 2. int i declared not in the same place of usage
  * 3. char* str type is not const and str and x are not const pointers
- * 4. x pointing type should be size_t <-----------------------------------------
- * 4. no check if str is not NULL
- * 5. no check if x in no NULL
+ * 4. x pointing type should be size_t because of strlen return value
+ * 5. no check if str is not NULL and x is not NULL
  * 6. changing x value and not pointed variable value (dangerous!!!)
- * 7. no check after strlen that the len is bigger than 0
  * 8. the allocation size is not correct and its better to use sizeof(char) to tell the programmer what we allocating
  * 9. no check after malloc the the allocation succeeded (dangerous!!!)
  * 10. no null setting at the end of str2
@@ -41,9 +39,9 @@ char* foo(char* str, int* x)
  * 16. str2 is not conventional name
  */
 
-char* foo_updated(const char* const str, int* const str_length)
+char* foo_updated(const char* const str, size_t* const str_length)
 {
-	if (NULL == str_length || NULL == str) {
+	if (!str_length || !str) {
 		return NULL;
 	}
 	*str_length = strlen(str);
@@ -66,11 +64,12 @@ char* foo_updated(const char* const str, int* const str_length)
 	return reversed_str;
 }
 
+
 int main(void)
 {
 	const char* a = "Dan";
-	int x;
+	size_t x;
 	char* b = foo_updated(a, &x);
-	printf("%d %s\n", x, b);
+	printf("%lu %s\n", x, b);
 	return 0;
 }
