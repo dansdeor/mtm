@@ -15,11 +15,11 @@ struct player_level_t {
 
 void* copyPlayerLevel(void* key_or_data)
 {
-	if (!key_or_data) {
+	if (key_or_data == NULL) {
 		return NULL;
 	}
 	PlayerLevel player_level = malloc(sizeof(*player_level));
-	if (!player_level) {
+	if (player_level == NULL) {
 		return NULL;
 	}
 	player_level->player_id = ((PlayerLevel) key_or_data)->player_id;
@@ -36,6 +36,9 @@ void freePlayerLevel(void* key_or_data)
 
 int comparePlayerLevels(void* first_player_level, void* second_player_level)
 {
+	if (first_player_level == NULL || second_player_level == NULL) {
+		return 0;
+	}
 	double comparing_factor = ((PlayerLevel) first_player_level)->level - ((PlayerLevel) second_player_level)->level;
 	if (comparing_factor < 0) {
 		return 1;
@@ -56,7 +59,7 @@ Map getPlayerLevelMap(Map players, int number_of_games)
 								  freePlayerLevel,
 								  freePlayerLevel,
 								  comparePlayerLevels);
-	if (!player_levels) {
+	if (player_levels == NULL) {
 		return NULL;
 	}
 	MAP_FOREACH(int*, player_id, players) {
@@ -79,7 +82,7 @@ Map getPlayerLevelMap(Map players, int number_of_games)
 
 int getPlayerLevelId(PlayerLevel player_level)
 {
-	if (!player_level) {
+	if (player_level == NULL) {
 		return 0;
 	}
 	return player_level->player_id;
@@ -88,7 +91,7 @@ int getPlayerLevelId(PlayerLevel player_level)
 
 double getPlayerLevel(PlayerLevel player_level)
 {
-	if (!player_level) {
+	if (player_level == NULL) {
 		return 0;
 	}
 	return player_level->level;

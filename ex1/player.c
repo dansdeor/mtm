@@ -14,7 +14,7 @@ struct player_t {
 
 void* copyPlayer(void* player)
 {
-	if (!player) {
+	if (player == NULL) {
 		return NULL;
 	}
 	Player new_player = malloc(sizeof(*new_player));
@@ -33,7 +33,7 @@ void* copyPlayer(void* player)
 
 void* copyPlayerId(void* player_id)
 {
-	if (!player_id) {
+	if (player_id == NULL) {
 		return NULL;
 	}
 	int* new_player_id = malloc(sizeof(*new_player_id));
@@ -59,6 +59,9 @@ void freePlayerId(void* player_id)
 
 int comparePlayerId(void* first_player_id, void* second_player_id)
 {
+	if (first_player_id == NULL || second_player_id == NULL) {
+		return 0;
+	}
 	return *(int*) first_player_id - *(int*) second_player_id;
 }
 
@@ -66,7 +69,7 @@ int comparePlayerId(void* first_player_id, void* second_player_id)
 Player createPlayer()
 {
 	Player player = malloc(sizeof(*player));
-	if (!player) {
+	if (player == NULL) {
 		return NULL;
 	}
 	player->score = 0;
@@ -81,7 +84,7 @@ Player createPlayer()
 
 int getPlayerScore(Player player)
 {
-	if (!player) {
+	if (player == NULL) {
 		return 0;
 	}
 	return player->score;
@@ -90,7 +93,7 @@ int getPlayerScore(Player player)
 
 int getPlayerWins(Player player)
 {
-	if (!player) {
+	if (player == NULL) {
 		return 0;
 	}
 	return player->num_wins;
@@ -99,7 +102,7 @@ int getPlayerWins(Player player)
 
 int getPlayerLoses(Player player)
 {
-	if (!player) {
+	if (player == NULL) {
 		return 0;
 	}
 	return player->num_loses;
@@ -108,7 +111,7 @@ int getPlayerLoses(Player player)
 
 int getPlayerDraws(Player player)
 {
-	if (!player) {
+	if (player == NULL) {
 		return 0;
 	}
 	return player->num_draws;
@@ -117,7 +120,7 @@ int getPlayerDraws(Player player)
 
 int getPlayerPlayTime(Player player)
 {
-	if (!player) {
+	if (player == NULL) {
 		return 0;
 	}
 	return player->play_time;
@@ -126,7 +129,7 @@ int getPlayerPlayTime(Player player)
 
 int getPlayerNumberOfPlays(Player player)
 {
-	if (!player) {
+	if (player == NULL) {
 		return 0;
 	}
 	return player->number_of_plays;
@@ -135,7 +138,7 @@ int getPlayerNumberOfPlays(Player player)
 
 void setPlayerScore(Player player, int score)
 {
-	if (!player) {
+	if (player == NULL) {
 		return;
 	}
 	player->score = score;
@@ -144,7 +147,7 @@ void setPlayerScore(Player player, int score)
 
 void setPlayerWins(Player player, int num_wins)
 {
-	if (!player) {
+	if (player == NULL) {
 		return;
 	}
 	player->num_wins = num_wins;
@@ -153,7 +156,7 @@ void setPlayerWins(Player player, int num_wins)
 
 void setPlayerLoses(Player player, int num_loses)
 {
-	if (!player) {
+	if (player == NULL) {
 		return;
 	}
 	player->num_loses = num_loses;
@@ -162,7 +165,7 @@ void setPlayerLoses(Player player, int num_loses)
 
 void setPlayerDraws(Player player, int num_draws)
 {
-	if (!player) {
+	if (player == NULL) {
 		return;
 	}
 	player->num_draws = num_draws;
@@ -171,7 +174,7 @@ void setPlayerDraws(Player player, int num_draws)
 
 void setPlayerPlayTime(Player player, int play_time)
 {
-	if (!player) {
+	if (player == NULL) {
 		return;
 	}
 	player->play_time = play_time;
@@ -180,7 +183,7 @@ void setPlayerPlayTime(Player player, int play_time)
 
 void setPlayerNumberOfPlays(Player player, int number_of_plays)
 {
-	if (!player) {
+	if (player == NULL) {
 		return;
 	}
 	player->number_of_plays = number_of_plays;

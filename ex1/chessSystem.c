@@ -18,7 +18,7 @@ struct chess_system_t {
 ChessSystem chessCreate()
 {
 	ChessSystem chess_system = malloc(sizeof(*chess_system));
-	if (!chess_system) {
+	if (chess_system == NULL) {
 		return NULL;
 	}
 	chess_system->tournaments = mapCreate(copyTournament,
@@ -26,7 +26,7 @@ ChessSystem chessCreate()
 										  freeTournament,
 										  freeTournamentId,
 										  compareTournamentId);
-	if (!chess_system->tournaments) {
+	if (chess_system->tournaments == NULL) {
 		free(chess_system);
 		return NULL;
 	}
@@ -35,7 +35,7 @@ ChessSystem chessCreate()
 									  freePlayer,
 									  freePlayerId,
 									  comparePlayerId);
-	if (!chess_system->players) {
+	if (chess_system->players == NULL) {
 		mapDestroy(chess_system->tournaments);
 		free(chess_system);
 		return NULL;
@@ -47,7 +47,7 @@ ChessSystem chessCreate()
 
 void chessDestroy(ChessSystem chess)
 {
-	if (!chess) {
+	if (chess == NULL) {
 		return;
 	}
 	mapDestroy(chess->tournaments);
@@ -58,11 +58,11 @@ void chessDestroy(ChessSystem chess)
 
 static bool isTournamentLocationLegal(const char* location)
 {
-	if (!location) {
+	if (location == NULL) {
 		return false;
 	}
 	size_t string_size = strlen(location);
-	if (!string_size) {
+	if (string_size <= 0) {
 		return false;
 	}
 	if (location[0] < 'A' || 'Z' < location[0]) {
@@ -80,7 +80,7 @@ static bool isTournamentLocationLegal(const char* location)
 ChessResult chessAddTournament(ChessSystem chess, int tournament_id,
 							   int max_games_per_player, const char* tournament_location)
 {
-	if (!chess) {
+	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
 	if (tournament_id <= 0) {
@@ -111,7 +111,7 @@ ChessResult chessAddTournament(ChessSystem chess, int tournament_id,
 
 static Player getOrCreatePlayer(ChessSystem chess, int player_id)
 {
-	if (!chess || player_id <= INVALID_PLAYER_ID) {
+	if (chess == NULL || player_id <= INVALID_PLAYER_ID) {
 		return NULL;
 	}
 	if (!mapContains(chess->players, &player_id)) {
@@ -129,7 +129,7 @@ static Player getOrCreatePlayer(ChessSystem chess, int player_id)
  */
 static void updatePlayers(ChessSystem chess)
 {
-	if (!chess) {
+	if (chess == NULL) {
 		return;
 	}
 	mapClear(chess->players);
@@ -171,7 +171,7 @@ static void updatePlayers(ChessSystem chess)
 ChessResult chessAddGame(ChessSystem chess, int tournament_id, int first_player,
 						 int second_player, Winner winner, int play_time)
 {
-	if (!chess) {
+	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
 	if (tournament_id <= 0 || first_player <= 0 || second_player <= 0 || first_player == second_player) {
@@ -209,7 +209,7 @@ ChessResult chessAddGame(ChessSystem chess, int tournament_id, int first_player,
 
 ChessResult chessRemoveTournament(ChessSystem chess, int tournament_id)
 {
-	if (!chess) {
+	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
 	if (tournament_id <= 0) {
@@ -231,7 +231,7 @@ ChessResult chessRemoveTournament(ChessSystem chess, int tournament_id)
 
 ChessResult chessRemovePlayer(ChessSystem chess, int player_id)
 {
-	if (!chess) {
+	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
 	if (player_id <= 0) {
@@ -264,7 +264,8 @@ ChessResult chessRemovePlayer(ChessSystem chess, int player_id)
 
 static int pickWinner(ChessSystem chess, int first_player_id, int second_player_id)
 {
-	if (!chess || (!mapContains(chess->players, &first_player_id) && !mapContains(chess->players, &second_player_id))) {
+	if (chess == NULL || (!mapContains(chess->players, &first_player_id)
+						  && !mapContains(chess->players, &second_player_id))) {
 		return INVALID_PLAYER_ID;
 	}
 	Player first_player = mapGet(chess->players, &first_player_id);
@@ -306,7 +307,7 @@ static int pickWinner(ChessSystem chess, int first_player_id, int second_player_
 
 ChessResult chessEndTournament(ChessSystem chess, int tournament_id)
 {
-	if (!chess) {
+	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
 	if (tournament_id <= 0) {
@@ -352,7 +353,7 @@ ChessResult chessEndTournament(ChessSystem chess, int tournament_id)
 
 double chessCalculateAveragePlayTime(ChessSystem chess, int player_id, ChessResult* chess_result)
 {
-	if (!chess || !chess_result) {
+	if (chess == NULL || chess_result == NULL) {
 		if (chess_result != NULL) {
 			*chess_result = CHESS_NULL_ARGUMENT;
 		}
@@ -377,7 +378,7 @@ double chessCalculateAveragePlayTime(ChessSystem chess, int player_id, ChessResu
 
 ChessResult chessSavePlayersLevels(ChessSystem chess, FILE* file)
 {
-	if (!chess || !file) {
+	if (chess == NULL || file == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
 	Map players_map = getPlayerLevelMap(chess->players, chess->number_of_games);
@@ -398,7 +399,7 @@ ChessResult chessSavePlayersLevels(ChessSystem chess, FILE* file)
 
 ChessResult chessSaveTournamentStatistics(ChessSystem chess, char* path_file)
 {
-	if (!chess || !path_file) {
+	if (chess == NULL || path_file == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
 	FILE* file = NULL;
