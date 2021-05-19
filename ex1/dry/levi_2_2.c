@@ -2,23 +2,23 @@
  #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-char* foo(char* str, int* x) {
+char* foo(char* str, int* num) {
  char* str2;
  int i;
- x = strlen(str);
- str2 = malloc(*x);
- for (i = 0; i < *x; i++)
- str2[i] = str[*x - i];
- if (*x % 2 == 0) {
+ num = strlen(str);
+ str2 = malloc(*num);
+ for (i = 0; i < *num; i++)
+ str2[i] = str[*num - i];
+ if (*num % 2 == 0) {
  printf("%s", str);
  }
- if (*x % 2 != 0)
+ if (*num % 2 != 0)
  {
  printf("%s", str2);
  }
  return str2;
 }
- * חסר כוכבית ב x
+ * חסר כוכבית ב num
  */
 #include <stdio.h>
 #include <stdlib.h>
