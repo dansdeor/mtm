@@ -277,7 +277,7 @@ bool isGameExist(Tournament tournament, int first_player_id, int second_player_i
 }
 
 
-MapResult addGame(Tournament tournament, int first_player, int second_player, Winner winner, int play_time)
+MapResult addTournamentGame(Tournament tournament, int first_player, int second_player, Winner winner, int play_time)
 {
 	if (tournament == NULL) {
 		return MAP_NULL_ARGUMENT;

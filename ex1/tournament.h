@@ -53,6 +53,6 @@ void setTournamentWinner(Tournament tournament, int winner_id);
 
 bool isGameExist(Tournament tournament, int first_player_id, int second_player_id);
 
-MapResult addGame(Tournament tournament, int first_player, int second_player, Winner winner, int play_time);
+MapResult addTournamentGame(Tournament tournament, int first_player, int second_player, Winner winner, int play_time);
 
 #endif /* TOURNAMENT_H_ */

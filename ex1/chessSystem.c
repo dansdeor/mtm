@@ -198,7 +198,7 @@ ChessResult chessAddGame(ChessSystem chess, int tournament_id, int first_player,
 		return CHESS_EXCEEDED_GAMES;
 	}
 	//because the arguments are not set to null, the only option is memory allocation problem
-	if (addGame(tournament, first_player, second_player, winner, play_time) != MAP_SUCCESS) {
+	if (addTournamentGame(tournament, first_player, second_player, winner, play_time) != MAP_SUCCESS) {
 		return CHESS_OUT_OF_MEMORY;
 	}
 	chess->number_of_games++;
@@ -381,7 +381,7 @@ ChessResult chessSavePlayersLevels(ChessSystem chess, FILE* file)
 	if (chess == NULL || file == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
-	Map players_map = getPlayerLevelMap(chess->players, chess->number_of_games);
+	Map players_map = getPlayerLevelMap(chess->players, chess->number_of_games);//need to change this
 	if (!players_map) {
 		return CHESS_SAVE_FAILURE;
 	}
