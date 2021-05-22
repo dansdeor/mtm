@@ -138,7 +138,6 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
 	if (allocation_result != MAP_SUCCESS) {
 		return allocation_result;
 	}
-
 	if (mapContains(map, keyElement)) {
 		mapRemove(map, keyElement);
 	}
