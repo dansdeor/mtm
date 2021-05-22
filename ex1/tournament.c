@@ -9,6 +9,7 @@ struct tournament_t {
 	int max_games_per_player;
 	TournamentStatus status;
 	int max_play_time;
+	int number_of_players;
 	int winner_id;
 	Map games;
 };
@@ -23,6 +24,7 @@ void* copyTournament(void* tournament)
 												 ((Tournament) tournament)->location,
 												 ((Tournament) tournament)->status,
 												 ((Tournament) tournament)->max_play_time,
+												 ((Tournament) tournament)->number_of_players,
 												 ((Tournament) tournament)->winner_id);
 
 	MAP_FOREACH(int*, i, ((Tournament) tournament)->games) {
@@ -78,7 +80,7 @@ int compareTournamentId(void* first_tournament_id, void* second_tournament_id)
 
 
 Tournament createTournament(int max_games_per_player, const char* tournament_location,
-							TournamentStatus status, int max_play_time, int winner_id)
+							TournamentStatus status, int max_play_time, int number_of_players, int winner_id)
 {
 	Tournament tournament = malloc(sizeof(*tournament));
 	if (tournament == NULL) {
@@ -100,6 +102,7 @@ Tournament createTournament(int max_games_per_player, const char* tournament_loc
 	tournament->max_games_per_player = max_games_per_player;
 	tournament->status = status;
 	tournament->max_play_time = max_play_time;
+	tournament->number_of_players = number_of_players;
 	tournament->winner_id = winner_id;
 	tournament->games = games;
 
@@ -204,41 +207,7 @@ int getTournamentNumberOfPlayers(Tournament tournament)
 	if (tournament == NULL) {
 		return 0;
 	}
-	Player player_data = createPlayer();
-	if (player_data == NULL) {
-		return 0;
-	}
-	Map players = mapCreate(copyPlayer,
-							copyPlayerId,
-							freePlayer,
-							freePlayerId,
-							comparePlayerId);
-	if (players == NULL) {
-		freePlayer(player_data);
-		return 0;
-	}
-	MAP_FOREACH(int*, game_index, tournament->games) {
-		Game game = mapGet(tournament->games, game_index);
-		int first_player_id = getFirstPlayerId(game);
-		if (first_player_id != INVALID_PLAYER_ID && mapPut(players, &first_player_id, player_data) != MAP_SUCCESS) {
-			freePlayer(player_data);
-			mapDestroy(players);
-			freeGameIndex(game_index);
-			return 0;
-		}
-		int second_player_id = getFirstPlayerId(game);
-		if (second_player_id != INVALID_PLAYER_ID && mapPut(players, &second_player_id, player_data) != MAP_SUCCESS) {
-			freePlayer(player_data);
-			mapDestroy(players);
-			freeGameIndex(game_index);
-			return 0;
-		}
-		freeGameIndex(game_index);
-	}
-	int number_of_players = mapGetSize(players);
-	freePlayer(player_data);
-	mapDestroy(players);
-	return number_of_players;
+	return tournament->number_of_players;
 }
 
 
@@ -277,6 +246,23 @@ bool isGameExist(Tournament tournament, int first_player_id, int second_player_i
 }
 
 
+static bool isPlayerInTournament(Tournament tournament, int player_id)
+{
+	if (tournament == NULL || player_id <= INVALID_PLAYER_ID) {
+		return false;
+	}
+	MAP_FOREACH(int*, game_index, tournament->games) {
+		Game game = mapGet(tournament->games, game_index);
+		if (player_id == getFirstPlayerId(game) || player_id == getSecondPlayerId(game)) {
+			freeGameIndex(game_index);
+			return true;
+		}
+		freeGameIndex(game_index);
+	}
+	return false;
+}
+
+
 MapResult addTournamentGame(Tournament tournament, int first_player, int second_player, Winner winner, int play_time)
 {
 	if (tournament == NULL) {
@@ -285,6 +271,12 @@ MapResult addTournamentGame(Tournament tournament, int first_player, int second_
 	Game game = createGame(first_player, second_player, winner, play_time);
 	if (game == NULL) {
 		return MAP_OUT_OF_MEMORY;
+	}
+	if (!isPlayerInTournament(tournament, first_player)) {
+		tournament->number_of_players++;
+	}
+	if (!isPlayerInTournament(tournament, second_player)) {
+		tournament->number_of_players++;
 	}
 	int index = mapGetSize(tournament->games);
 	MapResult result = mapPut(tournament->games, &index, game);

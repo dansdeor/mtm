@@ -25,7 +25,7 @@ void freeTournamentId(void* tournament_id);
 int compareTournamentId(void* first_tournament_id, void* second_tournament_id);
 
 Tournament createTournament(int max_games_per_player, const char* tournament_location,
-							TournamentStatus status, int max_play_time, int winner_id);
+							TournamentStatus status, int max_play_time, int number_of_players, int winner_id);
 
 const char* getTournamentLocation(Tournament tournament);
 
@@ -53,6 +53,7 @@ void setTournamentWinner(Tournament tournament, int winner_id);
 
 bool isGameExist(Tournament tournament, int first_player_id, int second_player_id);
 
-MapResult addTournamentGame(Tournament tournament, int first_player, int second_player, Winner winner, int play_time);
+MapResult addTournamentGame(Tournament tournament, int first_player, int second_player, Winner winner,
+							int play_time);
 
 #endif /* TOURNAMENT_H_ */

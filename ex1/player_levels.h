@@ -7,7 +7,7 @@ typedef struct player_level_t* PlayerLevel;
 
 void freePlayerLevel(void* key_or_data);
 
-Map getPlayerLevelMap(Map players, int number_of_games);
+Map getPlayerLevelMap(Map players);
 
 int getPlayerLevelId(PlayerLevel player_level);
 
