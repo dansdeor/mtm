@@ -52,7 +52,7 @@ int comparePlayerLevels(void* first_player_level, void* second_player_level)
 }
 
 
-Map getPlayerLevelMap(Map players, int number_of_games)
+Map getPlayerLevelMap(Map players)
 {
 	Map player_levels = mapCreate(copyPlayerLevel,
 								  copyPlayerLevel,
@@ -66,9 +66,14 @@ Map getPlayerLevelMap(Map players, int number_of_games)
 		struct player_level_t player_level;
 		player_level.player_id = *player_id;
 		Player player = mapGet(players, player_id);
-		player_level.level = (WINS_FACTOR * getPlayerWins(player) +
-							  LOSES_FACTOR * getPlayerLoses(player) +
-							  DRAW_FACTOR * getPlayerDraws(player)) / ((double) number_of_games);
+		if (getPlayerNumberOfPlays(player) != 0) {
+			player_level.level = (WINS_FACTOR * getPlayerWins(player) +
+								  LOSES_FACTOR * getPlayerLoses(player) +
+								  DRAW_FACTOR * getPlayerDraws(player)) / ((double) getPlayerNumberOfPlays(player));
+		}
+		else {
+			player_level.level = 0;
+		}
 		if (mapPut(player_levels, &player_level, &player_level) != MAP_SUCCESS) {
 			freePlayerId(player_id);
 			mapDestroy(player_levels);

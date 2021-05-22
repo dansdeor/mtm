@@ -27,12 +27,13 @@
 *                    matches a given element (by the key compare function).
 *   				  This resets the internal iterator.
 *   mapGetFirst	- Sets the internal iterator to the first (smallest) key in the
-*   				  map, and returns it.
+*   				  map, and returns a copy of it.
 *   mapGetNext		- Advances the internal iterator to the next key and
-*   				  returns it.
+*   				  returns a copy it.
 *	 mapClear		- Clears the contents of the map. Frees all the elements of
 *	 				  the map using the free function.
-* 	 MAP_FOREACH	- A macro for iterating over the map's elements.
+* 	 MAP_FOREACH	- A macro for iterating over the map's elements, iterator needs to be deallocated (freed)
+*                     each iteration.
 */
 
 /** Type for defining the map */
@@ -155,7 +156,7 @@ bool mapContains(Map map, MapKeyElement element);
 * @return
 * 	MAP_NULL_ARGUMENT if a NULL was sent as map or keyElement or dataElement
 * 	MAP_OUT_OF_MEMORY if an allocation failed (Meaning the function for copying
-* 	an element failed)
+* 	an element or a key failed)
 * 	MAP_SUCCESS the paired elements had been inserted successfully
 */
 MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement);
@@ -235,6 +236,7 @@ MapResult mapClear(Map map);
 /*!
 * Macro for iterating over a map.
 * Declares a new iterator for the loop.
+* iterator needs to be deallocated (freed) each iteration
 */
 #define MAP_FOREACH(type, iterator, map) \
     for(type iterator = (type) mapGetFirst(map) ; \
