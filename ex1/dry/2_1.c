@@ -55,6 +55,27 @@ static Node copyNode(Node node)
 }
 
 
+static bool appendList(Node dest, Node src)
+{
+	if (dest == NULL) {
+		return false;
+	}
+	while (dest->next != NULL) {
+		dest = dest->next;
+	}
+	while (src != NULL) {
+		Node new_node = copyNode(src);
+		if (new_node == NULL) {
+			return false;
+		}
+		dest->next = new_node;
+		dest = dest->next;
+		src = src->next;
+	}
+	return true;
+}
+
+
 static void destroyList(Node list)
 {
 	Node iterator = list;
@@ -104,16 +125,10 @@ Node mergeSortedLists(Node list1, Node list2, ErrorCode* error_code)
 		}
 	}
 	Node added_node = (list1 != NULL) ? list1 : list2;
-	while (added_node != NULL) {
-		Node new_node = copyNode(added_node);
-		if (new_node == NULL) {
-			destroyList(head);
-			*error_code = MEMORY_ERROR;
-			return NULL;
-		}
-		added_node = added_node->next;
-		iterator->next = new_node;
-		iterator = new_node;
+	if (!appendList(iterator, added_node)) {
+		destroyList(head);
+		*error_code = MEMORY_ERROR;
+		return NULL;
 	}
 	*error_code = SUCCESS;
 	return head;
