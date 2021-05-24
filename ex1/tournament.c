@@ -82,6 +82,9 @@ int compareTournamentId(void* first_tournament_id, void* second_tournament_id)
 Tournament createTournament(int max_games_per_player, const char* tournament_location,
 							TournamentStatus status, int max_play_time, int number_of_players, int winner_id)
 {
+	if (tournament_location == NULL) {
+		return NULL;
+	}
 	Tournament tournament = malloc(sizeof(*tournament));
 	if (tournament == NULL) {
 		return NULL;
@@ -169,7 +172,7 @@ TournamentStatus getTournamentStatus(Tournament tournament)
 int getTournamentWinner(Tournament tournament)
 {
 	if (tournament == NULL) {
-		return 0;
+		return INVALID_PLAYER_ID;
 	}
 	return tournament->winner_id;
 }
@@ -231,7 +234,7 @@ void setTournamentWinner(Tournament tournament, int winner_id)
 
 bool isGameExist(Tournament tournament, int first_player_id, int second_player_id)
 {
-	if (tournament == NULL || first_player_id <= 0 || second_player_id <= 0) {
+	if (tournament == NULL || first_player_id <= INVALID_PLAYER_ID || second_player_id <= INVALID_PLAYER_ID) {
 		return false;
 	}
 	MAP_FOREACH(int*, i, tournament->games) {

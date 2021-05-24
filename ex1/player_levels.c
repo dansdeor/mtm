@@ -28,7 +28,7 @@ void* copyPlayerLevel(void* key_or_data)
 }
 
 
-void freePlayerLevel(void* key_or_data)
+void freePlayerKeyOrLevel(void* key_or_data)
 {
 	free(key_or_data);
 }
@@ -52,12 +52,12 @@ int comparePlayerLevels(void* first_player_level, void* second_player_level)
 }
 
 
-Map getPlayerLevelMap(Map players)
+Map createPlayerLevelMap(Map players)
 {
 	Map player_levels = mapCreate(copyPlayerLevel,
 								  copyPlayerLevel,
-								  freePlayerLevel,
-								  freePlayerLevel,
+								  freePlayerKeyOrLevel,
+								  freePlayerKeyOrLevel,
 								  comparePlayerLevels);
 	if (player_levels == NULL) {
 		return NULL;
@@ -88,7 +88,7 @@ Map getPlayerLevelMap(Map players)
 int getPlayerLevelId(PlayerLevel player_level)
 {
 	if (player_level == NULL) {
-		return 0;
+		return INVALID_PLAYER_ID;
 	}
 	return player_level->player_id;
 }

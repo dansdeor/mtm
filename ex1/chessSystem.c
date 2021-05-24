@@ -122,7 +122,7 @@ static Player getOrCreatePlayer(ChessSystem chess, int player_id)
 
 
 /*
- * reset players scores and updates their other statistics based on all participated games.
+ * updatePlayers: reset players scores and updates their other statistics based on all participated games.
  * if a player has been removed, he will no longer be in the map
  */
 static void updatePlayers(ChessSystem chess)
@@ -381,16 +381,16 @@ ChessResult chessSavePlayersLevels(ChessSystem chess, FILE* file)
 	if (chess == NULL || file == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
-	Map players_map = getPlayerLevelMap(chess->players);
+	Map players_map = createPlayerLevelMap(chess->players);
 	if (!players_map) {
 		return CHESS_SAVE_FAILURE;
 	}
 	MAP_FOREACH(PlayerLevel, player_level, players_map) {
 		if (fprintf(file, "%d %.2lf\n", getPlayerLevelId(player_level), getPlayerLevel(player_level)) <= 0) {
-			freePlayerLevel(player_level);
+			freePlayerKeyOrLevel(player_level);
 			return CHESS_SAVE_FAILURE;
 		}
-		freePlayerLevel(player_level);
+		freePlayerKeyOrLevel(player_level);
 	}
 	mapDestroy(players_map);
 	return CHESS_SUCCESS;
@@ -409,7 +409,7 @@ ChessResult chessSaveTournamentStatistics(ChessSystem chess, char* path_file)
 		if (getTournamentStatus(tournament) == ENDED) {
 			if (!ended_tournament_exist) {
 				file = fopen(path_file, "w");
-				if (!file) {
+				if (file == NULL) {
 					freeTournamentId(tournament_id);
 					return CHESS_SAVE_FAILURE;
 				}
