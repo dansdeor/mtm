@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define WIN_SCORE (2)
+#define DRAW_SCORE (1)
+
 
 struct chess_system_t {
 	Map tournaments;
@@ -78,10 +81,10 @@ static bool isTournamentLocationLegal(const char* location)
 ChessResult chessAddTournament(ChessSystem chess, int tournament_id,
 							   int max_games_per_player, const char* tournament_location)
 {
-	if (chess == NULL) {
+	if (chess == NULL || tournament_location == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
-	if (tournament_id <= 0) {
+	if (tournament_id <= INVALID_TOURNAMENT_ID) {
 		return CHESS_INVALID_ID;
 	}
 	if (mapContains(chess->tournaments, &tournament_id)) {
@@ -172,7 +175,8 @@ ChessResult chessAddGame(ChessSystem chess, int tournament_id, int first_player,
 	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
-	if (tournament_id <= 0 || first_player <= 0 || second_player <= 0 || first_player == second_player) {
+	if (tournament_id <= INVALID_TOURNAMENT_ID || first_player <= INVALID_PLAYER_ID ||
+		second_player <= INVALID_PLAYER_ID || first_player == second_player) {
 		return CHESS_INVALID_ID;
 	}
 	if (winner < FIRST_PLAYER || winner > DRAW) {
@@ -188,7 +192,7 @@ ChessResult chessAddGame(ChessSystem chess, int tournament_id, int first_player,
 	if (isGameExist(tournament, first_player, second_player)) {
 		return CHESS_GAME_ALREADY_EXISTS;
 	}
-	if (play_time <= 0) {
+	if (play_time < 0) {
 		return CHESS_INVALID_PLAY_TIME;
 	}
 	int max_plays_per_player = getMaxGamesPerPlayer(tournament);
@@ -212,7 +216,7 @@ ChessResult chessRemoveTournament(ChessSystem chess, int tournament_id)
 	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
-	if (tournament_id <= 0) {
+	if (tournament_id <= INVALID_TOURNAMENT_ID) {
 		return CHESS_INVALID_ID;
 	}
 	if (!mapContains(chess->tournaments, &tournament_id)) {
@@ -229,7 +233,7 @@ ChessResult chessRemovePlayer(ChessSystem chess, int player_id)
 	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
-	if (player_id <= 0) {
+	if (player_id <= INVALID_PLAYER_ID) {
 		return CHESS_INVALID_ID;
 	}
 	if (!mapContains(chess->players, &player_id)) {
@@ -307,7 +311,7 @@ ChessResult chessEndTournament(ChessSystem chess, int tournament_id)
 	if (chess == NULL) {
 		return CHESS_NULL_ARGUMENT;
 	}
-	if (tournament_id <= 0) {
+	if (tournament_id <= INVALID_TOURNAMENT_ID) {
 		return CHESS_INVALID_ID;
 	}
 	if (!mapContains(chess->tournaments, &tournament_id)) {
@@ -328,20 +332,20 @@ ChessResult chessEndTournament(ChessSystem chess, int tournament_id)
 		Player second_player = getOrCreatePlayer(chess, getSecondPlayerId(game));
 		switch (getWinner(game)) {
 			case FIRST_PLAYER:
-				setPlayerScore(first_player, getPlayerScore(first_player) + 2);
+				setPlayerScore(first_player, getPlayerScore(first_player) + WIN_SCORE);
 				break;
 			case SECOND_PLAYER:
-				setPlayerScore(second_player, getPlayerScore(second_player) + 2);
+				setPlayerScore(second_player, getPlayerScore(second_player) + WIN_SCORE);
 				break;
 			case DRAW:
-				setPlayerScore(first_player, getPlayerScore(first_player) + 1);
-				setPlayerScore(second_player, getPlayerScore(second_player) + 1);
+				setPlayerScore(first_player, getPlayerScore(first_player) + DRAW_SCORE);
+				setPlayerScore(second_player, getPlayerScore(second_player) + DRAW_SCORE);
 				break;
 			default:
 				break;
 		}
-		winner_id = pickWinner(chess, getFirstPlayerId(game), winner_id);
-		winner_id = pickWinner(chess, getSecondPlayerId(game), winner_id);
+		winner_id = pickWinner(chess, winner_id, getFirstPlayerId(game));
+		winner_id = pickWinner(chess, winner_id, getSecondPlayerId(game));
 		freeGameIndex(game_index);
 	}
 	setTournamentWinner(tournament, winner_id);

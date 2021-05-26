@@ -243,6 +243,10 @@ bool isGameExist(Tournament tournament, int first_player_id, int second_player_i
 			freeGameIndex(i);
 			return true;
 		}
+		if (getFirstPlayerId(game) == second_player_id && getSecondPlayerId(game) == first_player_id) {
+			freeGameIndex(i);
+			return true;
+		}
 		freeGameIndex(i);
 	}
 	return false;

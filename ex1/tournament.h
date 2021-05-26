@@ -6,8 +6,9 @@
 
 #include <stdbool.h>
 
-typedef struct tournament_t* Tournament;
+#define INVALID_TOURNAMENT_ID (0)
 
+typedef struct tournament_t* Tournament;
 
 typedef enum {
 	STARTED, ENDED
