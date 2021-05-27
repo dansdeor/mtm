@@ -270,11 +270,11 @@ static int pickWinner(ChessSystem chess, int first_player_id, int second_player_
 		return INVALID_PLAYER_ID;
 	}
 	Player first_player = mapGet(chess->players, &first_player_id);
-	if (!first_player) {
+	if (first_player == NULL) {
 		return second_player_id;
 	}
 	Player second_player = mapGet(chess->players, &second_player_id);
-	if (!second_player) {
+	if (second_player == NULL) {
 		return first_player_id;
 	}
 	if (getPlayerScore(first_player) > getPlayerScore(second_player)) {
