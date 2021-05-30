@@ -34,3 +34,5 @@ add_executable(
         ex1/player_levels.c
         ex1/mtm_map/map.c
 )
+#ex2
+add_subdirectory("ex2")
