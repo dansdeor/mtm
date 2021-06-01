@@ -30,7 +30,7 @@ Map mapCreate(copyMapDataElements copyDataElement,
 		return NULL;
 	}
 	Map map = malloc(sizeof(*map));
-	if (!map) {
+	if (map == NULL) {
 		return NULL;
 	}
 	map->CopyDataElement = copyDataElement;
@@ -46,7 +46,7 @@ Map mapCreate(copyMapDataElements copyDataElement,
 
 void mapDestroy(Map map)
 {
-	if (!map) {
+	if (map == NULL) {
 		return;
 	}
 	mapClear(map);
@@ -56,7 +56,7 @@ void mapDestroy(Map map)
 
 Map mapCopy(Map map)
 {
-	if (!map) {
+	if (map == NULL) {
 		return NULL;
 	}
 	Map new_map = mapCreate(map->CopyDataElement,
@@ -64,10 +64,9 @@ Map mapCopy(Map map)
 							map->FreeDataElement,
 							map->FreeKeyElement,
 							map->CompareKeyElements);
-	if (!map->head) {
+	if (map->head == NULL) {
 		return new_map;
 	}
-
 	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
 		if (mapPut(new_map, i->keyElement, i->dataElement) == MAP_OUT_OF_MEMORY) {
 			mapDestroy(new_map);
@@ -80,7 +79,7 @@ Map mapCopy(Map map)
 
 int mapGetSize(Map map)
 {
-	if (!map) {
+	if (map == NULL) {
 		return -1;
 	}
 	int size = 0;
@@ -93,7 +92,7 @@ int mapGetSize(Map map)
 
 bool mapContains(Map map, MapKeyElement element)
 {
-	if (!map || !element) {
+	if (map == NULL || element == NULL) {
 		return false;
 	}
 	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
@@ -107,20 +106,20 @@ bool mapContains(Map map, MapKeyElement element)
 
 static MapResult createMapElement(Map map, MapElement* pointer, MapKeyElement keyElement, MapDataElement dataElement)
 {
-	if (!map || !pointer || !keyElement || !dataElement) {
+	if (map == NULL || pointer == NULL || keyElement == NULL || dataElement == NULL) {
 		return MAP_NULL_ARGUMENT;
 	}
 	MapElement element = malloc(sizeof(*element));
-	if (!element) {
+	if (element == NULL) {
 		return MAP_OUT_OF_MEMORY;
 	}
 	element->keyElement = map->CopyKeyElement(keyElement);
-	if (!element->keyElement) {
+	if (element->keyElement == NULL) {
 		free(element);
 		return MAP_OUT_OF_MEMORY;
 	}
 	element->dataElement = map->CopyDataElement(dataElement);
-	if (!element->dataElement) {
+	if (element->dataElement == NULL) {
 		free(element->keyElement);
 		free(element);
 		return MAP_OUT_OF_MEMORY;
@@ -141,7 +140,7 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
 	if (mapContains(map, keyElement)) {
 		mapRemove(map, keyElement);
 	}
-	if (!map->head) {
+	if (map->head == NULL) {
 		map->head = element;
 		return MAP_SUCCESS;
 	}
@@ -166,7 +165,7 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement)
 
 MapDataElement mapGet(Map map, MapKeyElement keyElement)
 {
-	if (!map || !keyElement) {
+	if (map == NULL || keyElement == NULL) {
 		return NULL;
 	}
 	for (MapElement i = map->head; i != NULL; i = i->nextMapElement) {
@@ -180,7 +179,7 @@ MapDataElement mapGet(Map map, MapKeyElement keyElement)
 
 static void mapElementFree(Map map, MapElement element)
 {
-	if (!map || !element) {
+	if (map == NULL || element == NULL) {
 		return;
 	}
 	map->FreeKeyElement(element->keyElement);
@@ -191,10 +190,10 @@ static void mapElementFree(Map map, MapElement element)
 
 MapResult mapRemove(Map map, MapKeyElement keyElement)
 {
-	if (!map || !keyElement) {
+	if (map == NULL || keyElement == NULL) {
 		return MAP_NULL_ARGUMENT;
 	}
-	if (!map->head) {
+	if (map->head == NULL) {
 		return MAP_ITEM_DOES_NOT_EXIST;
 	}
 
@@ -221,7 +220,7 @@ MapResult mapRemove(Map map, MapKeyElement keyElement)
 
 MapKeyElement mapGetFirst(Map map)
 {
-	if (!map) {
+	if (map == NULL) {
 		return NULL;
 	}
 	map->iterator = map->head;
@@ -234,7 +233,7 @@ MapKeyElement mapGetFirst(Map map)
 
 MapKeyElement mapGetNext(Map map)
 {
-	if (!map || !map->iterator) {
+	if (map == NULL || map->iterator == NULL) {
 		return NULL;
 	}
 	map->iterator = map->iterator->nextMapElement;
@@ -247,7 +246,7 @@ MapKeyElement mapGetNext(Map map)
 
 MapResult mapClear(Map map)
 {
-	if (!map) {
+	if (map == NULL) {
 		return MAP_NULL_ARGUMENT;
 	}
 	MapElement iterator = map->head;
