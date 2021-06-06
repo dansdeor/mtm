@@ -45,6 +45,7 @@ namespace mtm {
 	class sortedList::const_iterator {
 	private:
 		T* elements;
+		unsigned int size;
 		unsigned int index;
 
 		friend class sortedList;
@@ -52,17 +53,17 @@ namespace mtm {
 		const_iterator(const sortedList& list, unsigned int index);
 
 	public:
-		const_iterator(const const_iterator&);
+		const_iterator(const const_iterator& iterator) = default;
 
-		~const_iterator();
+		~const_iterator() = default;
 
-		const_iterator& operator=(const const_iterator&);
+		const_iterator& operator=(const const_iterator& iterator) = default;
 
 		const_iterator& operator++();
 
 		const_iterator operator++(int);
 
-		bool operator==(const const_iterator&) const;
+		bool operator==(const const_iterator& iterator) const;
 
 		const T& operator*() const;
 

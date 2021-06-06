@@ -1,4 +1,5 @@
 #include "sortedList.h"
+#include <stdexcept>
 
 
 void mtm::sortedList::resize()
@@ -116,4 +117,43 @@ mtm::sortedList::const_iterator mtm::sortedList::begin() const
 mtm::sortedList::const_iterator mtm::sortedList::end() const
 {
 	return const_iterator(*this, size - 1);
+}
+
+
+mtm::sortedList::const_iterator::const_iterator(const mtm::sortedList& list, unsigned int index) :
+		elements(list.elements), size(list.size), index(index)
+{
+}
+
+
+mtm::sortedList::const_iterator& mtm::sortedList::const_iterator::operator++()
+{
+	if (index >= size) {
+		throw std::out_of_range("++const_iterator failed");
+	}
+	index++;
+	return *this;
+}
+
+
+mtm::sortedList::const_iterator mtm::sortedList::const_iterator::operator++(int)
+{
+	if (index >= size) {
+		throw std::out_of_range("const_iterator++ failed");
+	}
+	const_iterator iterator(*this);
+	index++;
+	return iterator;
+}
+
+
+bool mtm::sortedList::const_iterator::operator==(const mtm::sortedList::const_iterator& iterator) const
+{
+	return elements == iterator.elements && index == iterator.index;
+}
+
+
+const T& mtm::sortedList::const_iterator::operator*() const
+{
+	return elements[index];
 }
