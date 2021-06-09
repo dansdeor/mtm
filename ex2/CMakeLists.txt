@@ -17,4 +17,4 @@ set(MTM_FLAGS_RELEASE "${MTM_FLAGS_DEBUG} -DNDEBUG")
 set(CMAKE_CPP_FLAGS ${MTM_FLAGS_DEBUG})
 
 #ex2
-add_executable(part_a_test.cpp part_a_test.cpp examDetails.cpp)
+add_executable(part_a_test.cpp part_a_test.cpp partA/examDetails.cpp)
