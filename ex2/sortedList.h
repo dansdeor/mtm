@@ -1,11 +1,10 @@
 #ifndef SORTED_LIST_H
 #define SORTED_LIST_H
 
-
-typedef int T;
-
+#include <stdexcept>
 
 namespace mtm {
+	template<class T>
 	class sortedList {
 	private:
 		T* elements;
@@ -14,35 +13,131 @@ namespace mtm {
 		static const unsigned int SIZE = 1;
 		static const unsigned int RESIZE_FACTOR = 2;
 
-		void resize();
+
+		void resize()
+		{
+			T* copied_elements = new T[max_size * RESIZE_FACTOR];
+			for (unsigned int i = 0; i < size; i++) {
+				copied_elements[i] = elements[i];
+			}
+			delete[] elements;
+			elements = copied_elements;
+			max_size *= RESIZE_FACTOR;
+		}
+
 
 	public:
-		sortedList();
-
-		sortedList(const sortedList& list);
-
-		~sortedList();
-
-		sortedList& operator=(const sortedList& list);
-
 		class const_iterator;
 
-		void insert(T& element);
 
-		void remove(const const_iterator& iterator);
+		sortedList() : elements(new T[SIZE]), size(0), max_size(SIZE)
+		{}
 
-		unsigned int length() const;
 
-		sortedList filter(bool (* predict)(const T&)) const;
+		sortedList(const sortedList& list) : elements(new T[list.max_size]),
+											 size(list.size),
+											 max_size(list.max_size)
+		{
+			for (unsigned int i = 0; i < list.size; i++) {
+				elements[i] = list.elements[i];
+			}
+		}
 
-		sortedList apply(T (* applier)(T)) const;
 
-		const_iterator begin() const;
+		~sortedList()
+		{
+			delete[] elements;
+		}
 
-		const_iterator end() const;
+
+		sortedList& operator=(const sortedList& list)
+		{
+			//The code can handle self-assignment but i don't see any reason to allocate new array for nothing
+			if (this == &list) {
+				return *this;
+			}
+			T* copied_elements = new T[list.max_size];
+			for (unsigned int i = 0; i < list.size; i++) {
+				copied_elements[i] = list.elements[i];
+			}
+			delete[] elements;
+			elements = copied_elements;
+			size = list.size;
+			max_size = list.max_size;
+			return *this;
+		}
+
+
+		void insert(T& element)
+		{
+			if (size == max_size) {
+				resize();
+			}
+			unsigned int index = 0;
+			while (!(element < elements[index])) {
+				index++;
+			}
+			for (unsigned int i = size - 1; i > index; i--) {
+				elements[i] = elements[i - 1];
+			}
+			elements[index] = element;
+			size++;
+		}
+
+
+		void remove(const const_iterator& iterator)
+		{
+			for (unsigned int i = size - 1; i > iterator.index; i--) {
+				elements[i - 1] = elements[i];
+			}
+			size--;
+		}
+
+
+		unsigned int length() const
+		{
+			return size;
+		}
+
+
+		template<class S>
+		sortedList filter(bool (* predict)(const S&)) const
+		{
+			sortedList list;
+			for (unsigned int i = 0; i < size; i++) {
+				if (predict(elements[i])) {
+					list.insert(elements[i]);
+				}
+			}
+			return list;
+		}
+
+
+		sortedList apply(T (* applier)(T)) const
+		{
+			sortedList list;
+			for (unsigned int i = 0; i < size; i++) {
+				T element = applier(elements[i]);
+				list.insert(element);
+			}
+			return list;
+		}
+
+
+		const_iterator begin() const
+		{
+			return const_iterator(*this, 0);
+		}
+
+
+		const_iterator end() const
+		{
+			return const_iterator(*this, size - 1);
+		}
 	};
 
-	class sortedList::const_iterator {
+	template<class T>
+	class sortedList<T>::const_iterator {
 	private:
 		T* elements;
 		unsigned int size;
@@ -50,7 +145,11 @@ namespace mtm {
 
 		friend class sortedList;
 
-		const_iterator(const sortedList& list, unsigned int index);
+
+		const_iterator(const sortedList& list, unsigned int index) :
+				elements(list.elements), size(list.size), index(index)
+		{}
+
 
 	public:
 		const_iterator(const const_iterator& iterator) = default;
@@ -59,13 +158,38 @@ namespace mtm {
 
 		const_iterator& operator=(const const_iterator& iterator) = default;
 
-		const_iterator& operator++();
 
-		const_iterator operator++(int);
+		const_iterator& operator++()
+		{
+			if (index >= size) {
+				throw std::out_of_range("++const_iterator failed");
+			}
+			index++;
+			return *this;
+		}
 
-		bool operator==(const const_iterator& iterator) const;
 
-		const T& operator*() const;
+		const_iterator operator++(int)
+		{
+			if (index >= size) {
+				throw std::out_of_range("const_iterator++ failed");
+			}
+			const_iterator iterator(*this);
+			index++;
+			return iterator;
+		}
+
+
+		bool operator==(const const_iterator& iterator) const
+		{
+			return elements == iterator.elements && index == iterator.index;
+		}
+
+
+		const T& operator*() const
+		{
+			return elements[index];
+		}
 
 	};
 }
