@@ -17,7 +17,7 @@ Zoom Link: https://tinyurl.com/ym8wf46t
 
 
 TEST 1.4
-std::exception
+invalid date
 
 TEST 1.5
 Alice
