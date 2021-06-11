@@ -144,7 +144,7 @@ namespace mtm {
 		unsigned int size;
 		unsigned int index;
 
-		friend class sortedList;
+		friend class sortedList<T>;
 
 
 		const_iterator(const sortedList& list, unsigned int index) :
