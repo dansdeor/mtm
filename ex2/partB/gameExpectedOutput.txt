@@ -1,0 +1,148 @@
+------example 1------
+*****************
+| | | | | | | | |
+| |M| | |N| | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| |s| | |m| | | |
+| | | | | | | | |
+*****************
+*****************
+| | | | | | | | |
+| | |M| |N| | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| |s| | |m| | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: IllegalTarget
+A game related error has occurred: OutOfRange
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| |s| | |m| | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: CellEmpty
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | |s| | | | | |
+| | | | | | | | |
+| | | | |m| | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: OutOfRange
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | |s| |m| | | |
+| | | | | | | | |
+*****************
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | |N| | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | |m| | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: CellEmpty
+A game related error has occurred: OutOfAmmo
+A game related error has occurred: IllegalTarget
+isOver: 0
+is powerlifters the winning team?: 0
+*****************
+| | | | | | | | |
+| | |M| | | | | |
+| | | | | | | | |
+| | | | |N| | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+*****************
+A game related error has occurred: CellEmpty
+isOver: 1
+is powerlifters the winning team?: 1
+------example 2------
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+|S| | | | | |m| |n| |
+| | | | | | |m| | | |
+*********************
+A game related error has occurred: OutOfRange
+A game related error has occurred: MoveTooFar
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+|S| | | | | |m| |n| |
+| | | | | | |m| | | |
+*********************
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | |m| |n| |
+| | | | | | |m| | | |
+*********************
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+|S| | | | | |m| |n| |
+| | | | | | |m| | | |
+*********************
+A game related error has occurred: OutOfAmmo
+A game related error has occurred: CellEmpty
+A game related error has occurred: IllegalCell
+A game related error has occurred: IllegalCell
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | |m| |n| |
+| | | | | | |m| | | |
+*********************
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | | | |n| |
+| | | | | | |m| | | |
+*********************
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | | | |n| |
+| | | | | | |m| | | |
+*********************
+A game related error has occurred: IllegalTarget
+A game related error has occurred: OutOfAmmo
+*********************
+| | | | | | | | | | |
+| | | | | | | | | | |
+| | | | | | |n| | | |
+| | | |S| | | | |n| |
+| | | | | | | | | | |
+*********************
