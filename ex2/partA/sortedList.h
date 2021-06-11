@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 namespace mtm {
-	template<class T>
+	template<typename T>
 	class sortedList {
 	private:
 		T* elements;
@@ -74,10 +74,10 @@ namespace mtm {
 				resize();
 			}
 			unsigned int index = 0;
-			while (!(element < elements[index])) {
+			while (!(element < elements[index]) && index < size) {
 				index++;
 			}
-			for (unsigned int i = size - 1; i > index; i--) {
+			for (unsigned int i = size; i > index; i--) {
 				elements[i] = elements[i - 1];
 			}
 			elements[index] = element;
@@ -87,8 +87,8 @@ namespace mtm {
 
 		void remove(const const_iterator& iterator)
 		{
-			for (unsigned int i = size - 1; i > iterator.index; i--) {
-				elements[i - 1] = elements[i];
+			for (unsigned int i = iterator.index; i < size - 1; i++) {
+				elements[i] = elements[i + 1];
 			}
 			size--;
 		}
@@ -100,12 +100,12 @@ namespace mtm {
 		}
 
 
-		template<class S>
-		sortedList filter(bool (* predict)(const S&)) const
+		template<typename S>
+		sortedList filter(const S& predicate) const
 		{
 			sortedList list;
 			for (unsigned int i = 0; i < size; i++) {
-				if (predict(elements[i])) {
+				if (predicate(elements[i])) {
 					list.insert(elements[i]);
 				}
 			}
@@ -113,7 +113,8 @@ namespace mtm {
 		}
 
 
-		sortedList apply(T (* applier)(T)) const
+		template<typename S>
+		sortedList apply(const S& applier) const
 		{
 			sortedList list;
 			for (unsigned int i = 0; i < size; i++) {
