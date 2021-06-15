@@ -6,6 +6,9 @@
 class Soldier : public Character {
 private:
 	static const mtm::units_t MOVING_RANGE = 3;
+	static const mtm::units_t ATTACK_COST = 1;
+protected:
+	static const mtm::units_t RELOAD_AMOUNT = 3;
 public:
 	Soldier(mtm::Team team, mtm::units_t health, mtm::units_t ammo, mtm::units_t range, mtm::units_t power);
 
@@ -17,8 +20,10 @@ public:
 
 	Character* clone() const override;
 
-	void attack(const mtm::GridPoint& src, const mtm::GridPoint& dst,
-				const std::vector<std::vector<std::shared_ptr<Character>>>& board) override;
+	void attackTarget(std::shared_ptr<Character> target, const mtm::GridPoint& attacker_coordinates,
+					  const mtm::GridPoint& target_coordinates) override;
+
+	void attackNeighbor(std::shared_ptr<Character> target, mtm::units_t range_from_dst) override;
 
 	void reload() override;
 };

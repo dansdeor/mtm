@@ -1,4 +1,5 @@
 #include "Medic.h"
+#include "Exceptions.h"
 
 using mtm::Team;
 using mtm::units_t;
@@ -27,14 +28,39 @@ Character* Medic::clone() const
 }
 
 
-void Medic::attack(const mtm::GridPoint& src, const mtm::GridPoint& dst,
-				   const std::vector<std::vector<std::shared_ptr<Character>>>& board)
+void Medic::attackTarget(std::shared_ptr<Character> target, const mtm::GridPoint& attacker_coordinates,
+						 const mtm::GridPoint& target_coordinates)
 {
+	if (range < mtm::GridPoint::distance(attacker_coordinates, target_coordinates)) {
+		throw mtm::OutOfRange();
+	}
+	if (target == nullptr) {
+		throw mtm::IllegalTarget();
+	}
+	if (this == target.get()) {
+		throw mtm::IllegalTarget();
+	}
+	if (this->team == target->getTeam()) {
+		target->addToHealth(power);
+	}
+	else {
+		if (ammo < ATTACK_COST) {
+			throw mtm::OutOfAmmo();
+		}
+		target->addToHealth(-power);//cannot do that line target->health -= power; ***IMPORTANT***
+		ammo -= ATTACK_COST;
+	}
+}
 
+
+void Medic::attackNeighbor(std::shared_ptr<Character> target, mtm::units_t range_from_dst)
+{
 }
 
 
 void Medic::reload()
 {
-
+	ammo += RELOAD_AMOUNT;
 }
+
+

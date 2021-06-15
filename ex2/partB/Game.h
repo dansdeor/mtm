@@ -13,6 +13,10 @@ private:
 	int height;
 	int width;
 	std::vector<std::vector<std::shared_ptr<Character>>> board;
+	static const char SOLDIER_CELL = 'S';
+	static const char MEDIC_CELL = 'M';
+	static const char SNIPER_CELL = 'N';
+	static const char EMPTY_CELL = ' ';
 
 	bool isCellLegal(const mtm::GridPoint& coordinates) const;
 
@@ -38,6 +42,8 @@ public:
 	void reload(const mtm::GridPoint& coordinates);
 
 	friend std::ostream& operator<<(std::ostream& os, const Game& game);
+
+	bool isOver(mtm::Team* winningTeam = nullptr) const;
 };
 
 
