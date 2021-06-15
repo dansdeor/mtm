@@ -160,8 +160,9 @@ std::ostream& operator<<(std::ostream& os, const Game& game)
 					case mtm::CharacterType::SNIPER:
 						textual_board[i * game.width + j] = Game::SNIPER_CELL;
 						break;
-					default:
-						break;
+				}
+				if (game.board[i][j]->getTeam() == mtm::Team::CROSSFITTERS) {
+					textual_board[i * game.width + j] = (char) std::tolower(textual_board[i * game.width + j]);
 				}
 			}
 		}
