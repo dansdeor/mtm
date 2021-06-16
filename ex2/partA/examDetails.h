@@ -14,6 +14,7 @@ namespace mtm {
 		double exam_length;
 		std::string link;
 
+		constexpr static const double EPSILON = 10e-6;
 		static const int DAYS_IN_MONTH = 30;
 		static const int NUMBER_OF_MONTHS = 12;
 
@@ -36,17 +37,17 @@ namespace mtm {
 
 		ExamDetails& operator=(const ExamDetails& exam) = default;
 
-		std::string getLink();
+		std::string getLink() const;
 
 		void setLink(const std::string& new_link);
 
 		int operator-(const mtm::ExamDetails& exam) const;
 
-		bool operator<(const ExamDetails& exam);
+		bool operator<(const ExamDetails& exam) const;
 
 		friend std::ostream& operator<<(std::ostream& os, const ExamDetails& exam);
 
-		static ExamDetails makeMatamExam(ExamDetails test);
+		static ExamDetails makeMatamExam();
 	};
 
 	class ExamDetails::InvalidDateException : public std::exception {
@@ -57,5 +58,7 @@ namespace mtm {
 
 	class ExamDetails::InvalidArgsException : public std::exception {
 	};
+
+	std::ostream& operator<<(std::ostream& os, const ExamDetails& exam);
 }
 #endif //EXAM_DETAILS_H

@@ -2,7 +2,7 @@
 // Created by ittay on 3/9/2021.
 //
 #include <iostream>
-#include "sortedList.h"
+#include "SortedList.h"
 #include "examDetails.h"
 
 using std::cout;
