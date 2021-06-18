@@ -18,6 +18,13 @@ namespace mtm {
 		static const int DAYS_IN_MONTH = 30;
 		static const int NUMBER_OF_MONTHS = 12;
 
+		static const int MTM_COURSE_NUMBER = 234124;
+		static const int MTM_COURSE_MONTH = 7;
+		static const int MTM_COURSE_DAY = 28;
+		constexpr static const double MTM_COURSE_TIME = 13.0;
+		constexpr static const double MTM_EXAM_LENGTH = 3.0;
+		constexpr static const char* MTM_COURSE_LINK = "https://tinyurl.com/59hzps6m";
+
 		static bool isTimeValid(double time);
 
 		static std::string timeToText(double time);

@@ -47,7 +47,7 @@ void Medic::attackTarget(std::shared_ptr<Character> target, const mtm::GridPoint
 		if (ammo < ATTACK_COST) {
 			throw mtm::OutOfAmmo();
 		}
-		target->addToHealth(-power);//cannot do that line target->health -= power; ***IMPORTANT***
+		target->addToHealth(-power);
 		ammo -= ATTACK_COST;
 	}
 }

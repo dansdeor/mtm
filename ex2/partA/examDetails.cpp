@@ -82,5 +82,10 @@ std::ostream& mtm::operator<<(std::ostream& os, const mtm::ExamDetails& exam)
 
 mtm::ExamDetails mtm::ExamDetails::makeMatamExam()
 {
-	return mtm::ExamDetails(234124, 7, 28, 13, 3, "https://tinyurl.com/59hzps6m");
+	return mtm::ExamDetails(MTM_COURSE_NUMBER,
+							MTM_COURSE_MONTH,
+							MTM_COURSE_DAY,
+							MTM_COURSE_TIME,
+							MTM_EXAM_LENGTH,
+							std::string(MTM_COURSE_LINK));
 }

@@ -4,53 +4,53 @@
 #include <stdexcept>
 
 namespace mtm {
-	template<typename T>
+	template<class T>
 	class SortedList {
 	private:
-		T** elements;
-		unsigned int size;
-		unsigned int max_size;
-		static const unsigned int SIZE = 1;
-		static const unsigned int RESIZE_FACTOR = 2;
+		class Element;
+
+		Element* head;
+
+
+		static Element* copyElements(const SortedList& list)
+		{
+			if (list.head == nullptr) {
+				return nullptr;
+			}
+			Element* head = new Element(*list.head);
+			Element* iterator = head;
+			Element* list_iterator = list.head->next;
+			while (list_iterator != nullptr) {
+				iterator->next = new Element(*list_iterator);
+				iterator = iterator->next;
+				list_iterator = list_iterator->next;
+			}
+			return head;
+		}
 
 
 		void deleteElements()
 		{
-			for (unsigned int i = 0; i < size; i++) {
-				delete elements[i];
+			Element* iterator = head;
+			while (iterator != nullptr) {
+				Element* next_element = iterator->next;
+				delete iterator;
+				iterator = next_element;
 			}
-			delete[] elements;
-		}
-
-
-		void resize()
-		{
-			T** copied_elements = new T* [max_size * RESIZE_FACTOR];
-			for (unsigned int i = 0; i < size; i++) {
-				copied_elements[i] = new T(*elements[i]);
-			}
-			deleteElements();
-			elements = copied_elements;
-			max_size *= RESIZE_FACTOR;
 		}
 
 
 	public:
+
 		class const_iterator;
 
 
-		SortedList() : elements(new T* [SIZE]), size(0), max_size(SIZE)
+		SortedList() : head(nullptr)
 		{}
 
 
-		SortedList(const SortedList& list) : elements(new T* [list.max_size]),
-											 size(list.size),
-											 max_size(list.max_size)
-		{
-			for (unsigned int i = 0; i < list.size; i++) {
-				elements[i] = new T(*list.elements[i]);
-			}
-		}
+		SortedList(const SortedList& list) : head(copyElements(list))
+		{}
 
 
 		~SortedList()
@@ -65,48 +65,62 @@ namespace mtm {
 			if (this == &list) {
 				return *this;
 			}
-			T** copied_elements = new T* [list.max_size];
-			for (unsigned int i = 0; i < list.size; i++) {
-				copied_elements[i] = new T(*list.elements[i]);
-			}
+			Element* new_head = copyElements(list);
 			deleteElements();
-			elements = copied_elements;
-			size = list.size;
-			max_size = list.max_size;
+			head = new_head;
 			return *this;
 		}
 
 
 		void insert(const T& element)
 		{
-			if (size == max_size) {
-				resize();
+			if (head == nullptr) {
+				head = new Element(element);
 			}
-			unsigned int index = 0;
-			while (index < size && !(element < *elements[index])) {
-				index++;
+			else if (element < head->data) {
+				Element* head_next = head;
+				head = new Element(element);
+				head->next = head_next;
 			}
-			for (unsigned int i = size; i > index; i--) {
-				elements[i] = elements[i - 1];
+			else {
+				Element* iterator = head;
+				while (iterator->next != nullptr && !(element < iterator->next->data)) {
+					iterator = iterator->next;
+				}
+				Element* new_element = new Element(element);
+				new_element->next = iterator->next;
+				iterator->next = new_element;
 			}
-			elements[index] = new T(element);
-			size++;
 		}
 
 
-		void remove(const const_iterator& iterator)
+		void remove(const const_iterator& it)
 		{
-			delete elements[iterator.index];
-			elements[iterator.index] = nullptr;
-			for (unsigned int i = iterator.index; i < size - 1; i++) {
-				elements[i] = elements[i + 1];
+			if (head == it.iterator) {
+				Element* element = head;
+				head = head->next;
+				delete element;
 			}
-			size--;
+			else {
+				Element* iterator = head;
+				while (iterator->next != nullptr) {
+					if (iterator->next == it.iterator) {
+						Element* element = iterator->next;
+						iterator->next = iterator->next->next;
+						delete element;
+					}
+					iterator = iterator->next;
+				}
+			}
 		}
 
 
-		unsigned int length() const
+		int length() const
 		{
+			int size = 0;
+			for (const_iterator it = this->begin(); it != this->end(); it++) {
+				size++;
+			}
 			return size;
 		}
 
@@ -115,9 +129,9 @@ namespace mtm {
 		SortedList filter(const S& predicate) const
 		{
 			SortedList list;
-			for (unsigned int i = 0; i < size; i++) {
-				if (predicate(*elements[i])) {
-					list.insert(*elements[i]);
+			for (const_iterator it = this->begin(); !(it == this->end()); it++) {
+				if (predicate(*it)) {
+					list.insert(*it);
 				}
 			}
 			return list;
@@ -128,8 +142,8 @@ namespace mtm {
 		SortedList apply(const S& applier) const
 		{
 			SortedList list;
-			for (unsigned int i = 0; i < size; i++) {
-				T element = applier(*elements[i]);
+			for (const_iterator it = this->begin(); !(it == this->end()); it++) {
+				T element = applier(*it);
 				list.insert(element);
 			}
 			return list;
@@ -138,28 +152,42 @@ namespace mtm {
 
 		const_iterator begin() const
 		{
-			return const_iterator(*this, 0);
+			return const_iterator(head);
 		}
 
 
 		const_iterator end() const
 		{
-			return const_iterator(*this, size);
+			return const_iterator(nullptr);
 		}
+	};
+
+	template<class T>
+	class SortedList<T>::Element {
+	private:
+		T data;
+		Element* next;
+
+		friend class SortedList<T>;
+
+
+		Element(const Element& element) : data(element.data), next(nullptr)
+		{}
+
+
+		explicit Element(const T& data) : data(data), next(nullptr)
+		{}
 	};
 
 	template<class T>
 	class SortedList<T>::const_iterator {
 	private:
-		T** elements;
-		unsigned int size;
-		unsigned int index;
+		Element* iterator;
 
 		friend class SortedList<T>;
 
 
-		const_iterator(const SortedList& list, unsigned int index) :
-				elements(list.elements), size(list.size), index(index)
+		explicit const_iterator(Element* list) : iterator(list)
 		{}
 
 
@@ -173,37 +201,38 @@ namespace mtm {
 
 		const_iterator& operator++()
 		{
-			if (index >= size) {
+			if (iterator == nullptr) {
 				throw std::out_of_range("++const_iterator failed");
 			}
-			index++;
+			iterator = iterator->next;
 			return *this;
 		}
 
 
 		const_iterator operator++(int)
 		{
-			if (index >= size) {
+			if (iterator == nullptr) {
 				throw std::out_of_range("const_iterator++ failed");
 			}
-			const_iterator iterator(*this);
-			index++;
-			return iterator;
+			const_iterator new_iterator(*this);
+			iterator = iterator->next;
+			return new_iterator;
 		}
 
 
-		bool operator==(const const_iterator& iterator) const
+		bool operator==(const const_iterator& other) const
 		{
-			return elements == iterator.elements && index == iterator.index;
+			return iterator == other.iterator;
 		}
 
 
 		const T& operator*() const
 		{
-			return *elements[index];
+			return iterator->data;
 		}
 
 	};
+
 }
 
 #endif //SORTED_LIST_H
