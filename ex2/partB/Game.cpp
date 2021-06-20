@@ -65,7 +65,7 @@ std::shared_ptr<Character> Game::makeCharacter(mtm::CharacterType type, mtm::Tea
 											   mtm::units_t health, mtm::units_t ammo,
 											   mtm::units_t range, mtm::units_t power)
 {
-	if (health <= 0 || ammo < 0 || range <= 0 || power < 0) {//TODO: need to check this values again
+	if (health <= 0 || ammo < 0 || range < 0 || power < 0) {
 		throw mtm::IllegalArgument();
 	}
 	switch (type) {
