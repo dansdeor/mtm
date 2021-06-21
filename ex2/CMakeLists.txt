@@ -18,7 +18,9 @@ set(CMAKE_CPP_FLAGS ${MTM_FLAGS_DEBUG})
 
 #ex2
 add_executable(part_a_test partA/part_a_test.cpp partA/examDetails.cpp)
-add_executable(gameTest partB/gameTest.cpp partB/Auxiliaries.cpp
+add_executable(gameTest
+        partB/gameTest.cpp
+        partB/Auxiliaries.cpp
         partB/Game.cpp
         partB/Character.cpp
         partB/Medic.cpp

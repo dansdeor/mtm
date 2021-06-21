@@ -10,22 +10,22 @@ using std::string;
 
 bool mtm::ExamDetails::isTimeValid(double time)
 {
-	time *= 10;
-	int discrete_time = static_cast<int>(time);
-	return (discrete_time % 5 == 0) && (std::fmod(time, 1.0 * discrete_time) < EPSILON) && 0 <= time && time < 24 * 10;
+	double hours;
+	double minutes = modf(time, &hours);
+	return (fabs(minutes - 0.5) < EPSILON || fabs(minutes) < EPSILON) && 0 <= hours && hours < 24;
 }
 
 
 std::string mtm::ExamDetails::timeToText(double time)
 {
 	string text;
-	int hours = static_cast<int>(time);
-	text += std::to_string(hours) + ":";
-	int minutes = static_cast<int>((time - hours) * 60);
+	double hours;
+	double minutes = modf(time, &hours) * 60;
+	text += std::to_string(static_cast<int>(hours)) + ":";
 	if (minutes < 10) {
 		text += "0";
 	}
-	text += std::to_string(minutes);
+	text += std::to_string(static_cast<int>(minutes));
 	return text;
 }
 

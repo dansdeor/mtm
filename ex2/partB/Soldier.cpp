@@ -49,9 +49,9 @@ void Soldier::attackTarget(std::shared_ptr<Character> target, const mtm::GridPoi
 
 void Soldier::attackNeighbor(std::shared_ptr<Character> target, mtm::units_t range_from_dst)
 {
-	if (0 < range_from_dst && range_from_dst <= static_cast<mtm::units_t>(std::ceil(range_from_dst / 3.0))) {
+	if (0 < range_from_dst && range_from_dst <= static_cast<mtm::units_t>(std::ceil(range / 3.0))) {
 		if (target != nullptr && this->team != target->getTeam()) {
-			target->addToHealth(-static_cast<mtm::units_t >(std::ceil(power / 2.0)));
+			target->addToHealth(-static_cast<mtm::units_t>(std::ceil(power / 2.0)));
 		}
 	}
 }
