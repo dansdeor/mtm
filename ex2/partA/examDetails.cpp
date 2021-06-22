@@ -12,7 +12,7 @@ bool mtm::ExamDetails::isTimeValid(double time)
 {
 	double hours;
 	double minutes = modf(time, &hours);
-	return (fabs(minutes - 0.5) < EPSILON || fabs(minutes) < EPSILON) && 0 <= hours && hours < 24;
+	return (fabs(minutes - HALF_HOUR) < EPSILON || fabs(minutes) < EPSILON) && 0 <= hours && hours < HOURS_IN_DAY;
 }
 
 
@@ -33,7 +33,7 @@ std::string mtm::ExamDetails::timeToText(double time)
 mtm::ExamDetails::ExamDetails(int num_course, int month, int day, double time, double exam_length, const string& link)
 		: num_course(num_course), month(month), day(day), time(time), exam_length(exam_length), link(link)
 {
-	if (month < 1 || NUMBER_OF_MONTHS < month || day < 1 || DAYS_IN_MONTH < day) {
+	if (month < 1 || MONTHS_IN_YEAR < month || day < 1 || DAYS_IN_MONTH < day) {
 		throw ExamDetails::InvalidDateException();
 	}
 	if (!isTimeValid(time)) {

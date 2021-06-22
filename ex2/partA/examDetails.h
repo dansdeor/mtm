@@ -15,8 +15,10 @@ namespace mtm {
 		std::string link;
 
 		constexpr static const double EPSILON = 10e-6;
+		constexpr static const double HALF_HOUR = 0.5;
+		static const int HOURS_IN_DAY = 24;
 		static const int DAYS_IN_MONTH = 30;
-		static const int NUMBER_OF_MONTHS = 12;
+		static const int MONTHS_IN_YEAR = 12;
 
 		static const int MTM_COURSE_NUMBER = 234124;
 		static const int MTM_COURSE_MONTH = 7;
