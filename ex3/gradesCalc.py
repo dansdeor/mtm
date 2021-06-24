@@ -25,7 +25,7 @@ def final_grade(input_path: str, output_path: str) -> int:
     if 0 < len(students):
         output_file = open(output_path, 'w')
         for _, details in sorted(students.items()):
-            output_file.write(', '.join(details))
+            output_file.write(', '.join(details) + '\n')
         output_file.close()
 
     return sum([int(details[-1]) for details in students.values()]) // len(students)
