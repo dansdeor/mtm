@@ -10,19 +10,23 @@ using std::shared_ptr;
 
 
 Game::Game(int height, int width) : height(height),
-									width(width),
-									board(height, vector<shared_ptr<Character>>(width))
-{}
+									width(width)
+{
+	if (width <= 0 || height <= 0) {
+		throw mtm::IllegalArgument();
+	}
+	board = vector<vector<shared_ptr<Character>>>(height, vector<shared_ptr<Character>>(width, nullptr));
+}
 
 
 Game::Game(const Game& other) : height(other.height),
-								width(other.width),
-								board(height, vector<shared_ptr<Character>>(width))
+								width(other.width)
 {
+	board = vector<vector<shared_ptr<Character>>>(height, vector<shared_ptr<Character>>(width, nullptr));
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			if (other.board[i][j] != nullptr) {
-				board[i][j] = shared_ptr<Character>(other.board[i][j]->clone());
+				board[i][j] = other.board[i][j]->clone();
 			}
 		}
 	}
@@ -34,7 +38,8 @@ Game& Game::operator=(const Game& other)
 	if (this == &other) {
 		return *this;
 	}
-	vector<vector<shared_ptr<Character>>> copied_board(other.height, vector<shared_ptr<Character>>(other.width));
+	vector<vector<shared_ptr<Character>>> copied_board(other.height, vector<shared_ptr<Character>>(other.width,
+																								   nullptr));
 	for (int i = 0; i < other.height; i++) {
 		for (int j = 0; j < other.width; j++) {
 			if (other.board[i][j] != nullptr) {

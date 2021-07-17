@@ -118,7 +118,7 @@ namespace mtm {
 		int length() const
 		{
 			int size = 0;
-			for (const_iterator it = this->begin(); it != this->end(); it++) {
+			for (const_iterator it = this->begin(); !(it == this->end()); it++) {
 				size++;
 			}
 			return size;
@@ -126,7 +126,7 @@ namespace mtm {
 
 
 		template<typename S>
-		SortedList filter(const S& predicate) const
+		SortedList filter(S predicate) const
 		{
 			SortedList list;
 			for (const_iterator it = this->begin(); !(it == this->end()); it++) {
@@ -139,7 +139,7 @@ namespace mtm {
 
 
 		template<typename S>
-		SortedList apply(const S& applier) const
+		SortedList apply(S applier) const
 		{
 			SortedList list;
 			for (const_iterator it = this->begin(); !(it == this->end()); it++) {

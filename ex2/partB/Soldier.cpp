@@ -22,9 +22,9 @@ mtm::units_t Soldier::getMovingRange() const
 }
 
 
-Character* Soldier::clone() const
+std::shared_ptr<Character> Soldier::clone() const
 {
-	return new Soldier(team, health, ammo, range, power);
+	return std::shared_ptr<Character>(new Soldier(team, health, ammo, range, power));
 }
 
 

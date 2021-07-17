@@ -22,9 +22,9 @@ mtm::units_t Sniper::getMovingRange() const
 }
 
 
-Character* Sniper::clone() const
+std::shared_ptr<Character> Sniper::clone() const
 {
-	return new Sniper(team, health, ammo, range, power);
+	return std::shared_ptr<Character>(new Sniper(team, health, ammo, range, power));
 }
 
 

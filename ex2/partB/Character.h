@@ -30,7 +30,7 @@ public:
 	virtual mtm::units_t getMovingRange() const = 0;
 
 	//Creates a clone of the same class object, even for inherited ones because of the virtual keyword
-	virtual Character* clone() const = 0;
+	virtual std::shared_ptr<Character> clone() const = 0;
 
 	//Used to attack the chosen target coordinates specifically
 	virtual void attackTarget(std::shared_ptr<Character> target, const mtm::GridPoint& attacker_coordinates,

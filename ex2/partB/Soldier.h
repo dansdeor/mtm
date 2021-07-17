@@ -18,7 +18,7 @@ public:
 
 	mtm::units_t getMovingRange() const override;
 
-	Character* clone() const override;
+	std::shared_ptr<Character> clone() const override;
 
 	void attackTarget(std::shared_ptr<Character> target, const mtm::GridPoint& attacker_coordinates,
 					  const mtm::GridPoint& target_coordinates) override;

@@ -22,9 +22,9 @@ mtm::units_t Medic::getMovingRange() const
 }
 
 
-Character* Medic::clone() const
+std::shared_ptr<Character> Medic::clone() const
 {
-	return new Medic(team, health, ammo, range, power);
+	return std::shared_ptr<Character>(new Medic(team, health, ammo, range, power));
 }
 
 
