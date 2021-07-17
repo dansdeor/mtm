@@ -62,5 +62,3 @@ void Medic::reload()
 {
 	ammo += RELOAD_AMOUNT;
 }
-
-
