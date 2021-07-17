@@ -68,6 +68,7 @@ namespace mtm {
 	class ExamDetails::InvalidArgsException : public std::exception {
 	};
 
+
 	std::ostream& operator<<(std::ostream& os, const ExamDetails& exam);
 }
 #endif //EXAM_DETAILS_H

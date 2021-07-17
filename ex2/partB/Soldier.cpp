@@ -61,5 +61,3 @@ void Soldier::reload()
 {
 	ammo += RELOAD_AMOUNT;
 }
-
-
